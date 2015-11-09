@@ -64,8 +64,12 @@ dispatcher<local_ref<throwable_ref>>::call(environment &env,
 } // namespace detail
 
 template <typename R, typename... Args>
+inline method<R(Args...)>::method()
+    : _mid{nullptr} {}
+
+template <typename R, typename... Args>
 inline method<R(Args...)>::method(method_id mid)
-    : _mid(mid) {}
+    : _mid{mid} {}
 
 template <typename R, typename... Args>
 inline method<R(Args...)>::method(environment &env, raw::class_ref cls,
@@ -83,16 +87,31 @@ inline method<R(Args...)>::method(environment &env, raw::class_ref cls,
 }
 
 template <typename R, typename... Args>
+inline method<R(Args...)>::method(java::lang::Class &cls, const char *name) {
+  locateMethod(cls, name);
+}
+
+template <typename R, typename... Args>
 template <typename... CallingArgs>
 add_local_ref_t<R> method<R(Args...)>::
-operator()(environment &env, object_ref instance,
-           CallingArgs... args) {
-  static_assert(sizeof...(Args) == sizeof...(CallingArgs), "CallingArgs and Args need to be the same size");
+operator()(environment &env, object_ref instance, CallingArgs... args) {
+  if (!_mid) {
+    throw std::runtime_error("cannot call method with nullptr method_id");
+  }
+
+  static_assert(sizeof...(Args) == sizeof...(CallingArgs),
+                "CallingArgs and Args need to be the same size");
 
   std::array<value, sizeof...(args)> pack{to_value(args)...};
 
   return detail::dispatcher<add_local_ref_t<R>>::call(env, instance, _mid,
                                                       pack.data());
+}
+
+template <typename R, typename... Args>
+void method<R(Args...)>::locateMethod(java::lang::Class &cls,
+                                      const char *name) {
+  _mid = cls.getMethod<R(Args...)>(name);
 }
 
 } // namespace raw

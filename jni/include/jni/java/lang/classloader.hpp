@@ -25,11 +25,6 @@ public:
 
   Class loadClass(const std::string &name);
 
-  // returns a class loader which was initialized by
-  // JNI_OnLoad respectively JNI_CreateJavaVM and
-  // therefore is the "best" class loader
-  static ClassLoader &getDefaultClassLoader();
-
 private:
   friend class global_initialization;
   static void global_init_hook(environment &env);

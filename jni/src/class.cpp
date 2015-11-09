@@ -58,11 +58,13 @@ raw::method_id Class::getMethod(const char *name, const char *signature) {
 }
 
 ClassLoader Class::getClassLoader() const {
-  return ClassLoader{ method_cache::get().getClassLoader(environment::current(), _ref.raw()) };
+  return ClassLoader{
+      method_cache::get().getClassLoader(environment::current(), _ref.raw())};
 }
 
 Object Class::newInstance() const {
-  return Object{ method_cache::get().newInstance(environment::current(), _ref.raw()) };
+  return Object{
+      method_cache::get().newInstance(environment::current(), _ref.raw())};
 }
 
 } // namespace lang

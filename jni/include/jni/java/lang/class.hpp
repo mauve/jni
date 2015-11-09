@@ -31,11 +31,9 @@ public:
   template <typename Function> raw::method_id getMethod(const char *name);
 
   ClassLoader getClassLoader() const;
-
   Object newInstance() const;
 
 private:
-
   global_ref<raw::class_ref> _ref;
 };
 

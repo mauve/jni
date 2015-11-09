@@ -25,17 +25,15 @@ struct method_cache {
   raw::method<void(std::int64_t timeout)> wait2;
   raw::method<void(std::int64_t timeout, std::int32_t nanoseconds)> wait3;
 
-  method_cache(environment &env, raw::class_ref cls)
-      : hashCode{env, cls, "hashCode"}, toString{env, cls, "toString"},
-        equals{env, cls, "equals"}, notify{env, cls, "notify"},
-        notifyAll{env, cls, "notifyAll"}, wait1{env, cls, "wait"},
-        wait2{env, cls, "wait"}, wait3{env, cls, "wait"} {}
+  method_cache(Class cls)
+      : hashCode{cls, "hashCode"}, toString{cls, "toString"},
+        equals{cls, "equals"}, notify{cls, "notify"},
+        notifyAll{cls, "notifyAll"}, wait1{cls, "wait"}, wait2{cls, "wait"},
+        wait3{cls, "wait"} {}
 
   static method_cache &get() {
-    static method_cache cache{[]() {
-      auto cls = environment::current().find_class("java/lang/Object");
-      return method_cache{environment::current(), cls.raw()};
-    }()};
+    static method_cache cache{
+        Class{environment::current().find_class("java/lang/Object")}};
     return cache;
   }
 };
@@ -59,7 +57,8 @@ int Object::hashCode() const {
 }
 
 std::string Object::toString() const {
-  return to_string(method_cache::get().toString(environment::current(), _ref.raw()));
+  return to_string(
+      method_cache::get().toString(environment::current(), _ref.raw()));
 }
 
 bool Object::equals(const Object &other) const {
@@ -68,9 +67,7 @@ bool Object::equals(const Object &other) const {
 }
 
 Class Object::getClass() const {
-  local_ref<raw::class_ref> cls{
-      environment::current().get_object_class(_ref.raw())};
-  return Class{cls};
+  return Class{environment::current().get_object_class(_ref.raw())};
 }
 
 void Object::notify() {
