@@ -166,6 +166,8 @@
     <ClCompile Include="src\internal\ref_converter.cpp" />
     <ClCompile Include="src\object.cpp" />
     <ClCompile Include="src\string.cpp" />
+    <ClCompile Include="src\throwable.cpp" />
+    <ClCompile Include="src\throw_if_exception.cpp" />
     <ClCompile Include="src\types.cpp" />
     <ClCompile Include="src\value.cpp" />
     <ClCompile Include="src\vm.cpp" />
@@ -176,9 +178,11 @@
     <ClInclude Include="include\jni\config.hpp" />
     <ClInclude Include="include\jni\detail\add_local_ref.hpp" />
     <ClInclude Include="include\jni\detail\remove_ref.hpp" />
+    <ClInclude Include="include\jni\detail\throw_if_exception.hpp" />
     <ClInclude Include="include\jni\errors.hpp" />
     <ClInclude Include="include\jni\init.hpp" />
     <ClInclude Include="include\jni\java\lang\classloader.hpp" />
+    <ClInclude Include="include\jni\java\lang\throwable.hpp" />
     <ClInclude Include="include\jni\raw\field.hpp" />
     <ClInclude Include="include\jni\raw\ref_holder.hpp" />
     <ClInclude Include="include\jni\java\lang\class.hpp" />

@@ -51,6 +51,9 @@ Object::Object(Object &&other) = default;
 
 Object::~Object() = default;
 
+Object &Object::operator=(const Object &obj) = default;
+Object &Object::operator=(Object &&obj) = default;
+
 int Object::hashCode() const {
   return method_cache::get().hashCode(environment::current(), _ref.raw());
 }
@@ -96,7 +99,7 @@ void Object::wait(const boost::chrono::nanoseconds &timeout) const {
                             static_cast<std::int32_t>(remainder.count()));
 }
 
-raw::object_ref Object::ref() { return _ref.raw(); }
+raw::object_ref Object::ref() const { return _ref.raw(); }
 
 bool operator==(const Object &left, const Object &right) {
   return left.equals(right);
@@ -104,6 +107,22 @@ bool operator==(const Object &left, const Object &right) {
 
 bool operator!=(const Object &left, const Object &right) {
   return !(left == right);
+}
+
+bool operator==(const Object &left, std::nullptr_t) {
+  return left.ref() == nullptr;
+}
+
+bool operator==(std::nullptr_t, const Object &right) {
+  return nullptr == right.ref();
+}
+
+bool operator!=(const Object &left, std::nullptr_t) {
+  return left.ref() != nullptr;
+}
+
+bool operator!=(std::nullptr_t, const Object &right) {
+  return nullptr != right.ref();
 }
 
 std::ostream &operator<<(std::ostream &os, const Object &object) {

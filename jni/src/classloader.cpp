@@ -25,7 +25,8 @@ struct method_cache {
 } // anonymous
 
 void ClassLoader::global_init_hook(environment &env) {
-  // TODO: impl
+  // force init
+  method_cache::get();
 }
 
 ClassLoader::ClassLoader(local_ref<raw::object_ref> &&ref)

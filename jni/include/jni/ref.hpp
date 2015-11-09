@@ -33,6 +33,9 @@ public:
   local_ref &operator=(const global_ref<T> &other);
   local_ref &operator=(global_ref<T> &&other);
 
+  template <typename U>
+  local_ref<U> cast();
+
   void assign(T ref);
   T raw() const;
   T leak();
@@ -92,6 +95,9 @@ public:
   global_ref &operator=(local_ref<T> &&other);
 
   bool operator!();
+
+  template <typename U>
+  global_ref<U> cast();
 
   void assign(T ref);
   T raw() const;

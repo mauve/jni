@@ -6,6 +6,7 @@
 #endif
 
 #include <string>
+#include <jni/detail/throw_if_exception.hpp>
 
 namespace jni {
 namespace raw {
@@ -22,7 +23,9 @@ template <typename R> struct dispatcher {
 template<> inline static type                                                  \
   dispatcher<type>::call(environment &env, object_ref instance, method_id mid, \
                          const value *pack) {                                  \
-    return env.method(instance, mid, pack);                                    \
+    auto result = env.method(instance, mid, pack);                             \
+    throw_if_exception();                                                      \
+    return result;                                                             \
   \
 }
 
@@ -34,10 +37,16 @@ DEFINE_DISPATCHER(std::int32_t, call_int_method)
 DEFINE_DISPATCHER(std::int64_t, call_long_method)
 DEFINE_DISPATCHER(float, call_float_method)
 DEFINE_DISPATCHER(double, call_double_method)
-DEFINE_DISPATCHER(void, call_void_method)
 DEFINE_DISPATCHER(local_ref<object_ref>, call_object_method)
 
 #undef DEFINE_DISPATCHER
+
+template <>
+inline static void dispatcher<void>::call(environment &env, object_ref instance,
+                                          method_id mid, const value *pack) {
+  env.call_void_method(instance, mid, pack);
+  throw_if_exception();
+}
 
 template <>
 inline static local_ref<string_ref>
@@ -62,10 +71,6 @@ dispatcher<local_ref<throwable_ref>>::call(environment &env,
 }
 
 } // namespace detail
-
-template <typename R, typename... Args>
-inline method<R(Args...)>::method()
-    : _mid{nullptr} {}
 
 template <typename R, typename... Args>
 inline method<R(Args...)>::method(method_id mid)

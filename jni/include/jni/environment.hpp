@@ -193,8 +193,15 @@ public:
   //
 
   virtual void monitor_enter(raw::object_ref obj) = 0;
-
   virtual void monitor_leave(raw::object_ref obj) = 0;
+
+  //
+  // exceptions
+  //
+
+  virtual bool exception_occurred() = 0;
+  virtual void clear_exceptions() = 0;
+  virtual local_ref<raw::throwable_ref> current_exception() = 0;
 
   // returns the current thread-local environment, or attaches
   // the thread if no environment has been created for this thread

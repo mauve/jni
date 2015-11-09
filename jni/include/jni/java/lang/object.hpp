@@ -26,6 +26,9 @@ public:
   Object(Object &&other);
   virtual ~Object();
 
+  Object &operator=(const Object &obj);
+  Object &operator=(Object &&obj);
+
   int hashCode() const;
   std::string toString() const;
   bool equals(const Object &other) const;
@@ -38,7 +41,7 @@ public:
   void wait(const boost::chrono::milliseconds &timeout) const;
   void wait(const boost::chrono::nanoseconds &timeout) const;
 
-  raw::object_ref ref();
+  raw::object_ref ref() const;
 
 private:
   friend class Monitor;
@@ -46,8 +49,13 @@ private:
   global_ref<raw::object_ref> _ref;
 };
 
+
 JNI_EXPORT bool operator==(const Object &left, const Object &right);
 JNI_EXPORT bool operator!=(const Object &left, const Object &right);
+JNI_EXPORT bool operator==(const Object &left, std::nullptr_t);
+JNI_EXPORT bool operator==(std::nullptr_t, const Object &right);
+JNI_EXPORT bool operator!=(const Object &left, std::nullptr_t);
+JNI_EXPORT bool operator!=(std::nullptr_t, const Object &right);
 JNI_EXPORT std::ostream &operator<<(std::ostream &os, const Object &object);
 
 class JNI_EXPORT Monitor final {

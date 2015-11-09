@@ -24,7 +24,7 @@ template <typename Function> class method;
 
 template <typename R, typename... Args> class method<R(Args...)> {
 public:
-  method();
+  method() = delete;
   method(method_id mid);
   method(environment &env, raw::class_ref cls, const char *name);
   method(java::lang::Class &cls, const char *name);

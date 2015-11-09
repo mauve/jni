@@ -546,6 +546,19 @@ public:
     _env->MonitorExit(internal::to_jni(obj));
   }
 
+  //
+  // exceptions
+  //
+
+  bool exception_occurred() override { return !!_env->ExceptionCheck(); }
+
+  void clear_exceptions() override { _env->ExceptionClear(); }
+
+  local_ref<raw::throwable_ref> current_exception() override {
+    return make_local_ref(
+        internal::from_jni(_env->ExceptionOccurred(), "current_exception"));
+  }
+
 private:
   JNIEnv *_env;
 };

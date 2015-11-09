@@ -7,6 +7,8 @@
 #include <jni/java/lang/classloader.hpp>
 #include <jni/java/lang/object.hpp>
 #include <jni/raw/method.hpp>
+#include <jni/string.hpp>
+#include <jni/detail/throw_if_exception.hpp>
 
 namespace jni {
 namespace java {
@@ -17,11 +19,33 @@ namespace {
 struct method_cache {
   raw::method<local_ref<raw::object_ref>()> newInstance;
   raw::method<local_ref<raw::object_ref>()> getClassLoader;
+  raw::method<local_ref<raw::string_ref>()> getName;
+  raw::method<local_ref<raw::string_ref>()> getSimpleName;
+  raw::method<bool()> isAnnotation;
+  raw::method<bool(raw::class_ref)> isAnnotationPresent;
+  raw::method<bool()> isAnonymousClass;
+  raw::method<bool()> isArray;
+  raw::method<bool(raw::class_ref)> isAssignableFrom;
+  raw::method<bool()> isEnum;
+  raw::method<bool(raw::object_ref)> isInstance;
+  raw::method<bool()> isInterface;
+  raw::method<bool()> isLocalClass;
+  raw::method<bool()> isMemberClass;
+  raw::method<bool()> isPrimitive;
+  raw::method<bool()> isSynthetic;
 
   method_cache(Class cls)
       : newInstance{cls, "newInstance"},
         getClassLoader{
-            cls.getMethod("getClassLoader", "()Ljava/lang/ClassLoader;")} {}
+            cls.getMethod("getClassLoader", "()Ljava/lang/ClassLoader;")},
+        getName{cls, "getName"}, getSimpleName{cls, "getSimpleName"},
+        isAnnotation{cls, "isAnnotation"},
+        isAnnotationPresent{cls, "isAnnotationPresent"},
+        isAnonymousClass{cls, "isAnonymousClass"}, isArray{cls, "isArray"},
+        isAssignableFrom{cls, "isAssignableFrom"}, isEnum{cls, "isEnum"},
+        isInstance{cls, "isInstance"}, isInterface{cls, "isInterface"},
+        isLocalClass{cls, "isLocalClass"}, isMemberClass{cls, "isMemberClass"},
+        isPrimitive{cls, "isPrimitive"}, isSynthetic{cls, "isSynthetic"} {}
 
   static method_cache &get() {
     static method_cache cache{Class::forName("java/lang/Class")};
@@ -31,8 +55,8 @@ struct method_cache {
 
 } // namespace anonymous
 
-Class::Class(local_ref<raw::class_ref> &&cls) : _ref(std::move(cls)) {}
-Class::Class(global_ref<raw::class_ref> &&cls) : _ref(std::move(cls)) {}
+Class::Class(local_ref<raw::class_ref> &&cls) : Object(cls.cast<raw::object_ref>()) {}
+Class::Class(global_ref<raw::class_ref> &&cls) : Object(cls.cast<raw::object_ref>()) {}
 Class::Class(const Class &other) = default;
 Class::Class(Class &&other) = default;
 Class::~Class() = default;
@@ -42,26 +66,101 @@ Class &Class::operator=(Class &&other) = default;
 
 Class Class::forName(const char *name) {
   global_ref<raw::class_ref> cls{environment::current().find_class(name)};
-  if (!cls) {
-    // TODO: throw error
-    throw std::runtime_error("class not found");
-  }
-
+  throw_if_exception();
   return Class{std::move(cls)};
 }
 
 raw::method_id Class::getMethod(const char *name, const char *signature) {
-  return environment::current().get_method_id(_ref.raw(), name, signature);
+  return environment::current().get_method_id(static_cast<raw::class_ref>(ref()), name, signature);
 }
 
 ClassLoader Class::getClassLoader() const {
   return ClassLoader{
-      method_cache::get().getClassLoader(environment::current(), _ref.raw())};
+      method_cache::get().getClassLoader(environment::current(), static_cast<raw::class_ref>(ref()))};
 }
 
 Object Class::newInstance() const {
   return Object{
-      method_cache::get().newInstance(environment::current(), _ref.raw())};
+      method_cache::get().newInstance(environment::current(), static_cast<raw::class_ref>(ref()))};
+}
+
+std::string Class::getName() const {
+  return to_string(
+      method_cache::get().getName(environment::current(), static_cast<raw::class_ref>(ref())));
+}
+
+std::string Class::getSimpleName() const {
+  return to_string(
+      method_cache::get().getSimpleName(environment::current(), static_cast<raw::class_ref>(ref())));
+}
+
+// Returns true if this Class object represents an annotation type.
+bool Class::isAnnotation() const {
+  return method_cache::get().isAnnotation(environment::current(), static_cast<raw::class_ref>(ref()));
+}
+
+// Returns true if an annotation for the specified type is present on this
+// element, else false.
+bool Class::isAnnotationPresent(const Class &annotationClass) {
+  return method_cache::get().isAnnotationPresent(
+      environment::current(), static_cast<raw::class_ref>(ref()), static_cast<raw::class_ref>(annotationClass.ref()));
+}
+
+// Returns true if and only if the underlying class is an anonymous class.
+bool Class::isAnonymousClass() const {
+  return method_cache::get().isAnonymousClass(environment::current(),
+                                              static_cast<raw::class_ref>(ref()));
+}
+
+// Determines if this Class object represents an array class.
+bool Class::isArray() const {
+  return method_cache::get().isArray(environment::current(), static_cast<raw::class_ref>(ref()));
+}
+
+// Determines if the class or interface represented by this Class object is
+// either the same as, or is a superclass or superinterface of, the class or
+// interface represented by the specified Class parameter.
+bool Class::isAssignableFrom(const Class &cls) const {
+  return method_cache::get().isAssignableFrom(environment::current(),
+                                              static_cast<raw::class_ref>(ref()), static_cast<raw::class_ref>(cls.ref()));
+}
+
+// Returns true if and only if this class was declared as an enum in the source
+// code.
+bool Class::isEnum() const {
+  return method_cache::get().isEnum(environment::current(), static_cast<raw::class_ref>(ref()));
+}
+
+// Determines if the specified Object is assignment - compatible with the object
+// represented by this Class.
+bool Class::isInstance(const Object &obj) const {
+  return method_cache::get().isInstance(environment::current(), static_cast<raw::class_ref>(ref()),
+                                        obj.ref());
+}
+
+// Determines if the specified Class object represents an interface type.
+bool Class::isInterface() const {
+  return method_cache::get().isInterface(environment::current(), static_cast<raw::class_ref>(ref()));
+}
+
+// Returns true if and only if the underlying class is a local class.
+bool Class::isLocalClass() const {
+  return method_cache::get().isLocalClass(environment::current(), static_cast<raw::class_ref>(ref()));
+}
+
+// Returns true if and only if the underlying class is a member class.
+bool Class::isMemberClass() const {
+  return method_cache::get().isMemberClass(environment::current(), static_cast<raw::class_ref>(ref()));
+}
+
+// Determines if the specified Class object represents a primitive type.
+bool Class::isPrimitive() const {
+  return method_cache::get().isPrimitive(environment::current(), static_cast<raw::class_ref>(ref()));
+}
+
+// Returns true if this class is a synthetic class; returns false otherwise.
+bool Class::isSynthetic() const {
+  return method_cache::get().isSynthetic(environment::current(), static_cast<raw::class_ref>(ref()));
 }
 
 } // namespace lang

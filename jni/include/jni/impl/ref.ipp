@@ -64,6 +64,12 @@ inline local_ref<T> &local_ref<T>::operator=(global_ref<T> &&other) {
   return *this;
 }
 
+template <typename T>
+template <typename U>
+inline local_ref<U> local_ref<T>::cast() {
+  return local_ref<U>{static_cast<U>(leak())};
+}
+
 template <typename T> inline void local_ref<T>::assign(T ref) {
   release();
   _ref = ref;
@@ -127,8 +133,8 @@ inline global_ref<T>::global_ref(const global_ref<T> &other)
     : _ref(new_ref(other._ref)) {}
 
 template <typename T>
-inline global_ref<T>::global_ref(global_ref<T> &&other)
-    : _ref(other._ref) {
+inline global_ref<T>::global_ref(global_ref &&other)
+    : _ref(static_cast<T>(other._ref)) {
   other._ref = nullptr;
 }
 
@@ -182,6 +188,13 @@ inline global_ref<T> &global_ref<T>::operator=(local_ref<T> &&other) {
 }
 
 template <typename T> inline bool global_ref<T>::operator!() { return !_ref; }
+
+template <typename T>
+template <typename U>
+inline global_ref<U> global_ref<T>::cast() {
+  return global_ref<U>{static_cast<U>(leak()),
+                       global_ref<U>::adopt_existing_global_ref};
+}
 
 template <typename T> inline void global_ref<T>::assign(T ref) {
   release();
