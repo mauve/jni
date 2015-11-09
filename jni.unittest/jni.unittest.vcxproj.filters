@@ -33,6 +33,9 @@
     <ClCompile Include="test_method.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_signature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="classes\MethodTest.java" />

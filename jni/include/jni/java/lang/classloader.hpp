@@ -25,15 +25,13 @@ public:
 
   Class loadClass(const std::string &name);
 
-  static ClassLoader &getSystemClassLoader();
+  // returns a class loader which was initialized by
+  // JNI_OnLoad respectively JNI_CreateJavaVM and
+  // therefore is the "best" class loader
+  static ClassLoader &getDefaultClassLoader();
 
 private:
   friend class global_initialization;
-
-  struct method_cache;
-  static method_cache *cache_ptr;
-  static ClassLoader* system_class_loader;
-
   static void global_init_hook(environment &env);
 };
 

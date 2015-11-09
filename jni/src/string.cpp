@@ -9,7 +9,7 @@
 namespace jni {
 namespace impl {
 
-raw::string_ref modified_utf8::create(value_type *characters) {
+local_ref<raw::string_ref> modified_utf8::create(value_type *characters) {
   return environment::current().new_string(characters);
 }
 
@@ -30,7 +30,7 @@ void modified_utf8::release(
   return environment::current().release_string_elements(ref, buffer);
 }
 
-raw::string_ref modified_utf16::create(value_type *characters) {
+local_ref<raw::string_ref> modified_utf16::create(value_type *characters) {
   return environment::current().new_string(characters);
 }
 
@@ -174,6 +174,10 @@ std::string to_string(raw::string_ref str) {
   return result;
 }
 
+std::string to_string(local_ref<raw::string_ref> ref) {
+  return to_string(ref.raw());
+}
+
 std::wstring to_wstring(raw::string_ref str) {
   auto buffer = impl::modified_utf16::load(str);
   if (!buffer.first) {
@@ -186,6 +190,10 @@ std::wstring to_wstring(raw::string_ref str) {
   impl::modified_utf16::release(str, buffer);
 
   return result;
+}
+
+std::wstring to_wstring(local_ref<raw::string_ref> ref) {
+  return to_wstring(ref.raw());
 }
 
 std::ostream &operator<<(std::ostream &os,

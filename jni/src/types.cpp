@@ -93,12 +93,6 @@ ref_type _jni_array::type() const { return ref_type::array_type; }
 } // namespace detail
 #endif // JNI_WITH(CHECKED_REFS)
 
-/*
-#define DEFINE_SIGNATURE(type, str)                                            \
-  template <> struct get_signature<type> {                                     \
-    static const char *get() { return str; }                                   \
-  }
-  */
 #define DEFINE_SIGNATURE(type, str) template<> JNI_EXPORT const char *get_signature<type>::get() { return str; }
 
 DEFINE_SIGNATURE(bool, "Z");

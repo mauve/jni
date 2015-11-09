@@ -6,6 +6,11 @@
 #include <cstdint>
 
 namespace jni {
+
+// forward decl
+template <typename T> class local_ref;
+template <typename T> class global_ref;
+
 namespace raw {
 
 enum ref_type {

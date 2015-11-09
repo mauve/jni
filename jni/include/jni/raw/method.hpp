@@ -5,6 +5,8 @@
 #include <jni/raw/types.hpp>
 #include <jni/raw/value.hpp>
 #include <jni/raw/signature.hpp>
+#include <jni/detail/remove_ref.hpp>
+#include <jni/detail/add_local_ref.hpp>
 
 #include <array>
 
@@ -18,7 +20,9 @@ public:
   method(method_id mid);
   method(environment &env, raw::class_ref cls, const char *name);
 
-  R operator()(environment &env, object_ref instance, Args... args);
+  template <typename... CallingArgs>
+  add_local_ref_t<R> operator()(environment &env, object_ref instance,
+                                CallingArgs... args);
 
 private:
   method_id _mid;

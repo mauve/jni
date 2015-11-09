@@ -7,13 +7,11 @@
 #include <jni/ref.hpp>
 
 namespace jni {
-
-class global_initialization;
-
 namespace java {
 namespace lang {
 
 class Object;
+class ClassLoader;
 
 class JNI_EXPORT Class final {
 public:
@@ -32,14 +30,11 @@ public:
 
   template <typename Function> raw::method_id getMethod(const char *name);
 
+  ClassLoader getClassLoader() const;
+
   Object newInstance() const;
 
 private:
-  friend class global_initialization;
-  struct method_cache;
-  static method_cache *cache_ptr;
-
-  static void global_init_hook(environment& env);
 
   global_ref<raw::class_ref> _ref;
 };

@@ -35,30 +35,30 @@ DEFINE_DISPATCHER(std::int64_t, call_long_method)
 DEFINE_DISPATCHER(float, call_float_method)
 DEFINE_DISPATCHER(double, call_double_method)
 DEFINE_DISPATCHER(void, call_void_method)
-DEFINE_DISPATCHER(object_ref, call_object_method)
+DEFINE_DISPATCHER(local_ref<object_ref>, call_object_method)
 
 #undef DEFINE_DISPATCHER
 
 template <>
-inline static string_ref
-dispatcher<string_ref>::call(environment &env, object_ref instance,
-                             method_id mid, const value *pack) {
-  return static_cast<string_ref>(env.call_object_method(instance, mid, pack));
+inline static local_ref<string_ref>
+dispatcher<local_ref<string_ref>>::call(environment &env, object_ref instance,
+                                        method_id mid, const value *pack) {
+  return local_ref<string_ref>{env.call_object_method(instance, mid, pack)};
 }
 
 template <>
-inline static class_ref
-dispatcher<class_ref>::call(environment &env, object_ref instance,
-                            method_id mid, const value *pack) {
-  return static_cast<class_ref>(env.call_object_method(instance, mid, pack));
+inline static local_ref<class_ref>
+dispatcher<local_ref<class_ref>>::call(environment &env, object_ref instance,
+                                       method_id mid, const value *pack) {
+  return local_ref<class_ref>{env.call_object_method(instance, mid, pack)};
 }
 
 template <>
-inline static throwable_ref
-dispatcher<throwable_ref>::call(environment &env, object_ref instance,
-                                method_id mid, const value *pack) {
-  return static_cast<throwable_ref>(
-      env.call_object_method(instance, mid, pack));
+inline static local_ref<throwable_ref>
+dispatcher<local_ref<throwable_ref>>::call(environment &env,
+                                           object_ref instance, method_id mid,
+                                           const value *pack) {
+  return local_ref<throwable_ref>{env.call_object_method(instance, mid, pack)};
 }
 
 } // namespace detail
@@ -71,7 +71,7 @@ template <typename R, typename... Args>
 inline method<R(Args...)>::method(environment &env, raw::class_ref cls,
                                   const char *name)
     : _mid{nullptr} {
-  signature<R(Args...)> signature;
+  signature<add_local_ref_t<R>(add_local_ref_t<Args>...)> signature;
 
   _mid = env.get_method_id(cls, name, signature.get());
   if (!_mid) {
@@ -83,11 +83,16 @@ inline method<R(Args...)>::method(environment &env, raw::class_ref cls,
 }
 
 template <typename R, typename... Args>
-R method<R(Args...)>::operator()(environment &env, object_ref instance,
-                                 Args... args) {
+template <typename... CallingArgs>
+add_local_ref_t<R> method<R(Args...)>::
+operator()(environment &env, object_ref instance,
+           CallingArgs... args) {
+  static_assert(sizeof...(Args) == sizeof...(CallingArgs), "CallingArgs and Args need to be the same size");
+
   std::array<value, sizeof...(args)> pack{to_value(args)...};
 
-  return detail::dispatcher<R>::call(env, instance, _mid, pack.data());
+  return detail::dispatcher<add_local_ref_t<R>>::call(env, instance, _mid,
+                                                      pack.data());
 }
 
 } // namespace raw

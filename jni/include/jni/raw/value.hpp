@@ -7,6 +7,11 @@
 #include <jni/raw/types.hpp>
 
 namespace jni {
+
+// forward decl
+template <typename T> class local_ref;
+template <typename T> class global_ref;
+
 namespace raw {
 namespace detail {
 
@@ -35,6 +40,14 @@ JNI_EXPORT value to_value(std::int64_t v);
 JNI_EXPORT value to_value(float v);
 JNI_EXPORT value to_value(double v);
 JNI_EXPORT value to_value(object_ref v);
+
+template <typename T> static inline value to_value(const local_ref<T> &ref) {
+  return to_value(ref.raw());
+}
+
+template <typename T> static inline value to_value(const global_ref<T> &ref) {
+  return to_value(ref.raw());
+}
 
 } // namespace raw
 } // namespace jni

@@ -158,6 +158,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test_array.cpp" />
     <ClCompile Include="test_java_object.cpp" />
+    <ClCompile Include="test_signature.cpp" />
     <ClCompile Include="test_string.cpp" />
     <ClCompile Include="test_types.cpp" />
   </ItemGroup>

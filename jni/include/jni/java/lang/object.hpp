@@ -11,10 +11,6 @@
 #include <iosfwd>
 
 namespace jni {
-
-class environment;
-class global_initialization;
-
 namespace java {
 namespace lang {
 
@@ -45,13 +41,7 @@ public:
   raw::object_ref ref();
 
 private:
-  friend class global_initialization;
   friend class Monitor;
-
-  struct method_cache;
-  static method_cache *cache_ptr;
-
-  static void global_init_hook(environment &env);
 
   global_ref<raw::object_ref> _ref;
 };

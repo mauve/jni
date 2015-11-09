@@ -4,6 +4,7 @@
 #include <utility>
 
 #include <jni/environment.hpp>
+#include <jni/java/lang/classloader.hpp>
 #include <jni/java/lang/object.hpp>
 #include <jni/raw/method.hpp>
 
@@ -11,20 +12,27 @@ namespace jni {
 namespace java {
 namespace lang {
 
-struct Class::method_cache {
-  raw::method<raw::object_ref()> newInstance;
+namespace {
+
+struct method_cache {
+  raw::method<local_ref<raw::object_ref>()> newInstance;
+  raw::method<local_ref<raw::object_ref>()> getClassLoader;
 
   method_cache(environment &env, raw::class_ref cls)
-      : newInstance{env, cls, "newInstance"} {}
+      : newInstance{env, cls, "newInstance"},
+        getClassLoader{env.get_method_id(cls, "getClassLoader",
+                                         "()Ljava/lang/ClassLoader;")} {}
+
+  static method_cache &get() {
+    static method_cache cache{[]() {
+      auto cls = environment::current().find_class("java/lang/Class");
+      return method_cache{environment::current(), cls.raw()};
+    }()};
+    return cache;
+  }
 };
 
-Class::method_cache *Class::cache_ptr = nullptr;
-
-void Class::global_init_hook(environment &env) {
-  local_ref<raw::class_ref> cls{env.find_class("java/lang/Class")};
-  static method_cache cache{env, cls.raw()};
-  cache_ptr = &cache;
-}
+} // namespace anonymous
 
 Class::Class(local_ref<raw::class_ref> &&cls) : _ref(std::move(cls)) {}
 Class::Class(global_ref<raw::class_ref> &&cls) : _ref(std::move(cls)) {}
@@ -49,10 +57,12 @@ raw::method_id Class::getMethod(const char *name, const char *signature) {
   return environment::current().get_method_id(_ref.raw(), name, signature);
 }
 
+ClassLoader Class::getClassLoader() const {
+  return ClassLoader{ method_cache::get().getClassLoader(environment::current(), _ref.raw()) };
+}
+
 Object Class::newInstance() const {
-  local_ref<raw::object_ref> obj{
-      cache_ptr->newInstance(environment::current(), _ref.raw())};
-  return Object{std::move(obj)};
+  return Object{ method_cache::get().newInstance(environment::current(), _ref.raw()) };
 }
 
 } // namespace lang

@@ -13,10 +13,12 @@ namespace jni {
 namespace java {
 namespace lang {
 
-struct Object::method_cache {
+namespace {
+
+struct method_cache {
   raw::method<std::int32_t()> hashCode;
-  raw::method<raw::string_ref()> toString;
-  raw::method<bool(raw::object_ref)> equals;
+  raw::method<local_ref<raw::string_ref>()> toString;
+  raw::method<bool(local_ref<raw::object_ref>)> equals;
   raw::method<void()> notify;
   raw::method<void()> notifyAll;
   raw::method<void()> wait1;
@@ -28,15 +30,17 @@ struct Object::method_cache {
         equals{env, cls, "equals"}, notify{env, cls, "notify"},
         notifyAll{env, cls, "notifyAll"}, wait1{env, cls, "wait"},
         wait2{env, cls, "wait"}, wait3{env, cls, "wait"} {}
+
+  static method_cache &get() {
+    static method_cache cache{[]() {
+      auto cls = environment::current().find_class("java/lang/Object");
+      return method_cache{environment::current(), cls.raw()};
+    }()};
+    return cache;
+  }
 };
 
-Object::method_cache *Object::cache_ptr = nullptr;
-
-void Object::global_init_hook(environment &env) {
-  local_ref<raw::class_ref> cls{env.find_class("java/lang/Object")};
-  static method_cache cache{env, cls.raw()};
-  cache_ptr = &cache;
-}
+} // namespace anonymous
 
 //
 // Object
@@ -51,19 +55,16 @@ Object::Object(Object &&other) = default;
 Object::~Object() = default;
 
 int Object::hashCode() const {
-  return cache_ptr->hashCode(environment::current(), _ref.raw());
+  return method_cache::get().hashCode(environment::current(), _ref.raw());
 }
 
 std::string Object::toString() const {
-  local_ref<raw::string_ref> result{
-      cache_ptr->toString(environment::current(), _ref.raw())};
-
-  return to_string(result.raw());
+  return to_string(method_cache::get().toString(environment::current(), _ref.raw()));
 }
 
 bool Object::equals(const Object &other) const {
-  return cache_ptr->equals(environment::current(), _ref.raw(),
-                           other._ref.raw());
+  return method_cache::get().equals(environment::current(), _ref.raw(),
+                                    other._ref.raw());
 }
 
 Class Object::getClass() const {
@@ -72,18 +73,21 @@ Class Object::getClass() const {
   return Class{cls};
 }
 
-void Object::notify() { cache_ptr->notify(environment::current(), _ref.raw()); }
+void Object::notify() {
+  method_cache::get().notify(environment::current(), _ref.raw());
+}
 
 void Object::notifyAll() {
-  cache_ptr->notify(environment::current(), _ref.raw());
+  method_cache::get().notify(environment::current(), _ref.raw());
 }
 
 void Object::wait() const {
-  cache_ptr->wait1(environment::current(), _ref.raw());
+  method_cache::get().wait1(environment::current(), _ref.raw());
 }
 
 void Object::wait(const boost::chrono::milliseconds &timeout) const {
-  cache_ptr->wait2(environment::current(), _ref.raw(), timeout.count());
+  method_cache::get().wait2(environment::current(), _ref.raw(),
+                            timeout.count());
 }
 
 void Object::wait(const boost::chrono::nanoseconds &timeout) const {
@@ -91,13 +95,12 @@ void Object::wait(const boost::chrono::nanoseconds &timeout) const {
       boost::chrono::duration_cast<boost::chrono::milliseconds>(timeout);
   auto remainder = timeout % 1000000;
 
-  cache_ptr->wait3(environment::current(), _ref.raw(), milliseconds.count(),
-                   static_cast<std::int32_t>(remainder.count()));
+  method_cache::get().wait3(environment::current(), _ref.raw(),
+                            milliseconds.count(),
+                            static_cast<std::int32_t>(remainder.count()));
 }
 
-raw::object_ref Object::ref() {
-  return _ref.raw();
-}
+raw::object_ref Object::ref() { return _ref.raw(); }
 
 bool operator==(const Object &left, const Object &right) {
   return left.equals(right);

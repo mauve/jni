@@ -19,6 +19,7 @@ template <typename T> class local_ref {
 
 public:
   local_ref();
+  local_ref(std::nullptr_t);
   explicit local_ref(T ref);
   local_ref(const local_ref &other);
   local_ref(local_ref &&other);
@@ -56,6 +57,9 @@ inline bool operator!=(const local_ref<T> &ref, std::nullptr_t);
 template <typename T>
 inline bool operator!=(std::nullptr_t, const local_ref<T> &ref);
 
+template <typename T>
+inline local_ref<T> make_local_ref(T ref);
+
 //
 // global_ref
 //
@@ -69,6 +73,7 @@ public:
   enum steal_t { adopt_existing_global_ref };
 
   global_ref();
+  global_ref(std::nullptr_t);
   explicit global_ref(T ref);
   global_ref(T ref, steal_t);
   global_ref(const global_ref &other);

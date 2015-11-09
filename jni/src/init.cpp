@@ -21,8 +21,6 @@ public:
 namespace init {
 
 void run_init_hooks(environment &env) {
-  global_initialization::invoke_hook<java::lang::Class>(env);
-  global_initialization::invoke_hook<java::lang::Object>(env);
   global_initialization::invoke_hook<java::lang::ClassLoader>(env);
 }
 

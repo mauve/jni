@@ -16,7 +16,7 @@ namespace impl {
 struct JNI_EXPORT modified_utf8 {
   using value_type = const char;
 
-  static raw::string_ref create(value_type *begin);
+  static local_ref<raw::string_ref> create(value_type *begin);
   static std::pair<value_type *, std::size_t> load(raw::string_ref ref);
   static void release(raw::string_ref ref,
                       const std::pair<value_type *, std::size_t> &buffer);
@@ -25,7 +25,7 @@ struct JNI_EXPORT modified_utf8 {
 struct JNI_EXPORT modified_utf16 {
   using value_type = const wchar_t;
 
-  static raw::string_ref create(value_type *begin);
+  static local_ref<raw::string_ref> create(value_type *begin);
   static std::pair<value_type *, std::size_t> load(raw::string_ref ref);
   static void release(raw::string_ref ref,
                       const std::pair<value_type *, std::size_t> &buffer);
@@ -123,8 +123,8 @@ JNI_EXPORT bool operator!=(const std::wstring &left,
 JNI_EXPORT std::string to_string(const basic_string<impl::modified_utf8>& str);
 JNI_EXPORT std::wstring to_wstring(const basic_string<impl::modified_utf16>& str);
 
-JNI_EXPORT std::string to_string(raw::string_ref str);
-JNI_EXPORT std::wstring to_wstring(raw::string_ref str);
+JNI_EXPORT std::string to_string(local_ref<raw::string_ref> str);
+JNI_EXPORT std::wstring to_wstring(local_ref<raw::string_ref> str);
 
 JNI_EXPORT std::ostream &
 operator<<(std::ostream &os, const basic_string<impl::modified_utf8> &str);

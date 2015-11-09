@@ -2,12 +2,16 @@
 #pragma once
 
 #ifndef REF_INCLUDING
-# error "ref.ipp cannot be including directly"
+#error "ref.ipp cannot be including directly"
 #endif
 
 namespace jni {
 
 template <typename T> inline local_ref<T>::local_ref() : _ref(nullptr) {}
+
+template <typename T>
+inline local_ref<T>::local_ref(std::nullptr_t)
+    : _ref(nullptr) {}
 
 template <typename T> inline local_ref<T>::local_ref(T ref) : _ref(ref) {}
 
@@ -75,7 +79,7 @@ template <typename T> inline T local_ref<T>::leak() {
 
 template <typename T> inline bool local_ref<T>::operator!() { return !_ref; }
 
-template <typename T> static inline T local_ref<T>::new_ref(T ref) {
+template <typename T> inline T local_ref<T>::new_ref(T ref) {
   return static_cast<T>(environment::current().new_local_ref(ref));
 }
 
@@ -96,11 +100,19 @@ inline bool operator!=(std::nullptr_t, const local_ref<T> &ref) {
   return ref.raw() != nullptr;
 }
 
+template <typename T> inline local_ref<T> make_local_ref(T ref) {
+  return local_ref<T>{ref};
+}
+
 //
 // global_ref
 //
 
 template <typename T> inline global_ref<T>::global_ref() : _ref(nullptr) {}
+
+template <typename T>
+inline global_ref<T>::global_ref(std::nullptr_t)
+    : _ref(nullptr) {}
 
 template <typename T>
 inline global_ref<T>::global_ref(T ref)
@@ -123,12 +135,12 @@ inline global_ref<T>::global_ref(global_ref<T> &&other)
 template <typename T>
 template <typename U>
 inline global_ref<T>::global_ref(const local_ref<U> &other)
-    : _ref(new_ref(other.raw())) {}
+    : _ref(new_ref(static_cast<T>(other.raw()))) {}
 
 template <typename T>
 template <typename U>
 inline global_ref<T>::global_ref(local_ref<U> &&other)
-    : _ref(new_ref(other.raw())) {
+    : _ref(new_ref(static_cast<T>(other.raw()))) {
   other.release();
 }
 

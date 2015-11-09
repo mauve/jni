@@ -9,41 +9,53 @@ namespace jni {
 namespace java {
 namespace lang {
 
-struct ClassLoader::method_cache {
-  global_ref<raw::class_ref> ClassLoaderClass;
-  raw::method<raw::class_ref(raw::string_ref)> loadClass;
+namespace {
 
-  // TODO: fix
-  raw::method_id getSystemClassLoader_id;
+struct method_cache {
+  global_ref<raw::class_ref> ClassLoader;
+  raw::method<local_ref<raw::class_ref>(raw::string_ref)> loadClass;
 
-  method_cache(environment &env, raw::class_ref cls)
-      : ClassLoaderClass{cls}, loadClass{env, cls, "loadClass"} {
-    getSystemClassLoader_id = env.get_static_method_id(
-        cls, "getSystemClassLoader", "()Ljava/lang/ClassLoader;");
-    if (!getSystemClassLoader_id) {
-      throw std::runtime_error("cannot find getSystemClassLoader method_id");
-    }
+  method_cache()
+      : ClassLoader{environment::current().find_class("java/lang/ClassLoader")},
+        loadClass{environment::current(), ClassLoader.raw(), "loadClass"} {}
+
+  static method_cache &get() {
+    static method_cache cache;
+    return cache;
   }
 };
 
-ClassLoader::method_cache *ClassLoader::cache_ptr = nullptr;
-ClassLoader *ClassLoader::system_class_loader = nullptr;
+} // anonymous
+
+static ClassLoader *default_class_loader = nullptr;
 
 void ClassLoader::global_init_hook(environment &env) {
-  local_ref<raw::class_ref> cls879879{ env.find_class("MethodTest") };
+  // get the best classloader, which happens to be the classloader
+  // associated with any object AS LONG as we are getting the
+  // classloader during the JNI_OnLoad or CreateVM call,
+  // which is when we are calling this method
 
-  local_ref<raw::class_ref> cls{env.find_class("java/lang/ClassLoader")};
-  static method_cache cache{env, cls.raw()};
-  cache_ptr = &cache;
+  // TODO: fix
+  auto cls = env.find_class("java/lang/Class");
+  raw::method_id getClassLoader{ env.get_method_id(cls.raw(), "getClassLoader", "()Ljava/lang/ClassLoader;") };
 
-  local_ref<raw::object_ref> obj{env.call_object_method(
-      cls.raw(), cache.getSystemClassLoader_id, nullptr)};
-  if (!obj) {
-    throw std::runtime_error("call to getSystemClassLoader failed");
+  auto str = env.new_string("");
+  auto strcls = env.get_object_class(str.raw());
+
+  auto ldr = env.call_object_method(strcls.raw(), getClassLoader, nullptr);
+
+  if (!ldr) {
+    // getClassLoader can return null instead of an instance of the bootstrap
+    // loader, but because we need an instance we call getSystemClassLoader
+    // instead
+    auto cls = env.find_class("java/lang/ClassLoader");
+    raw::method_id getSystemClassLoader{ env.get_static_method_id(cls.raw(), "getSystemClassLoader", "()Ljava/lang/ClassLoader;") };
+
+    ldr = std::move(env.call_object_method(cls.raw(), getSystemClassLoader, nullptr));
   }
 
-  static ClassLoader class_loader{std::move(obj)};
-  ClassLoader::system_class_loader = &class_loader;
+  static ClassLoader default_class_loader_instance{std::move(ldr)};
+  default_class_loader = &default_class_loader_instance;
 }
 
 ClassLoader::ClassLoader(local_ref<raw::object_ref> &&ref)
@@ -58,13 +70,21 @@ ClassLoader::~ClassLoader() = default;
 
 Class ClassLoader::loadClass(const std::string &name) {
   modified_utf8_string jname{name.c_str()};
-  local_ref<raw::class_ref> cls{
-      cache_ptr->loadClass(environment::current(), ref(), jname.ref())};
-  return Class{std::move(cls)};
+  return Class{ method_cache::get().loadClass(
+    environment::current(), ref(), jname.ref()) };
 }
 
-ClassLoader &ClassLoader::getSystemClassLoader() {
-  return *system_class_loader;
+// ClassLoader &ClassLoader::getSystemClassLoader() {
+//  return *system_class_loader;
+//}
+
+ClassLoader &ClassLoader::getDefaultClassLoader() {
+  if (!default_class_loader) {
+    // TODO better error
+    throw std::runtime_error(
+        "init error, global init hooks missing for ClassLoader");
+  }
+  return *default_class_loader;
 }
 
 } // namespace lang

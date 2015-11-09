@@ -126,7 +126,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(output, T, jni_strings) {
 }
 
 BOOST_AUTO_TEST_CASE(to_string) {
-  jni::modified_utf8_string string{ "constant1" };
+  jni::modified_utf8_string string{"constant1"};
 
   using jni::to_string;
 
@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(to_string) {
 }
 
 BOOST_AUTO_TEST_CASE(to_wstring) {
-  jni::modified_utf16_string string{ L"constant1" };
+  jni::modified_utf16_string string{L"constant1"};
 
   using jni::to_wstring;
 
@@ -146,22 +146,20 @@ BOOST_AUTO_TEST_CASE(to_wstring) {
 }
 
 BOOST_AUTO_TEST_CASE(to_string_raw) {
-  jni::local_ref<jni::raw::string_ref> raw{
-      jni::environment::current().new_string("constant1")};
+  auto raw = jni::environment::current().new_string("constant1");
 
   using jni::to_string;
 
-  auto result = to_string(raw.raw());
+  auto result = to_string(raw);
   BOOST_TEST(result == "constant1");
 }
 
 BOOST_AUTO_TEST_CASE(to_wstring_raw) {
-  jni::local_ref<jni::raw::string_ref> raw{
-    jni::environment::current().new_string(L"constant1") };
+  auto raw = jni::environment::current().new_string(L"constant1");
 
   using jni::to_wstring;
 
-  auto result = to_wstring(raw.raw());
+  auto result = to_wstring(raw);
 
   // BOOST_TEST doesnt work with wstring
   bool strings_are_equal = result == L"constant1";

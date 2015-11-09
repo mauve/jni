@@ -70,19 +70,21 @@ public:
     _env->DeleteGlobalRef(internal::to_jni(obj));
   }
 
-  raw::class_ref find_class(const char *name) override {
+  local_ref<raw::class_ref> find_class(const char *name) override {
     if (name == nullptr)
       return nullptr;
-    return internal::from_jni(_env->FindClass(name), "find_class");
+    return make_local_ref(
+        internal::from_jni(_env->FindClass(name), "find_class"));
   }
 
   raw::method_id get_method_id(raw::class_ref cls, const char *name,
                                const char *signature) override {
     if (!name || !signature)
       return nullptr;
-    return internal::from_jni(
+    auto res = internal::from_jni(
         _env->GetMethodID(internal::to_jni(cls), name, signature),
         "get_method_id");
+    return res;
   }
 
   raw::method_id get_static_method_id(raw::class_ref cls, const char *name,
@@ -94,39 +96,40 @@ public:
         "get_static_method_id");
   }
 
-  raw::class_ref get_object_class(raw::object_ref obj) override {
+  local_ref<raw::class_ref> get_object_class(raw::object_ref obj) override {
     if (!obj)
       return nullptr;
-    return internal::from_jni(_env->GetObjectClass(internal::to_jni(obj)),
-                              "get_object_class");
+    return make_local_ref(internal::from_jni(
+        _env->GetObjectClass(internal::to_jni(obj)), "get_object_class"));
   }
 
-  raw::object_ref new_object(raw::class_ref cls, raw::method_id constructor,
-                             const raw::value *arguments) {
+  local_ref<raw::object_ref> new_object(raw::class_ref cls,
+                                        raw::method_id constructor,
+                                        const raw::value *arguments) {
     if (!cls || !constructor)
       return nullptr;
-    return internal::from_jni(
+    return make_local_ref(internal::from_jni(
         _env->NewObjectA(internal::to_jni(cls), internal::to_jni(constructor),
                          reinterpret_cast<const jvalue *>(arguments)),
-        "new_object");
+        "new_object"));
   }
 
   //
   // array
   //
 
-  raw::typed_array_ref<raw::object_ref>
+  local_ref<raw::typed_array_ref<raw::object_ref>>
   new_object_array(std::size_t size) override {
     return nullptr;
   }
 
-  raw::object_ref
+  local_ref<raw::object_ref>
   get_object_array_index(raw::typed_array_ref<raw::object_ref> arr,
                          std::size_t index) override {
-    return internal::from_jni(
+    return make_local_ref(internal::from_jni(
         _env->GetObjectArrayElement(internal::to_jni(arr),
                                     static_cast<jsize>(index)),
-        "get_object_array_index");
+        "get_object_array_index"));
   }
 
   void set_object_array_index(raw::typed_array_ref<raw::object_ref> arr,
@@ -136,46 +139,52 @@ public:
                                 internal::to_jni(obj));
   }
 
-  raw::typed_array_ref<bool> new_array(std::size_t size, bool *) override {
-    return internal::from_jni(_env->NewBooleanArray(size), "new_array<bool>");
+  local_ref<raw::typed_array_ref<bool>> new_array(std::size_t size,
+                                                  bool *) override {
+    return make_local_ref(
+        internal::from_jni(_env->NewBooleanArray(size), "new_array<bool>"));
   }
 
-  raw::typed_array_ref<std::uint8_t> new_array(std::size_t size,
-                                               std::uint8_t *) override {
-    return internal::from_jni(_env->NewByteArray(size),
-                              "new_array<std::uint8_t>");
+  local_ref<raw::typed_array_ref<std::uint8_t>>
+  new_array(std::size_t size, std::uint8_t *) override {
+    return make_local_ref(internal::from_jni(_env->NewByteArray(size),
+                                             "new_array<std::uint8_t>"));
   }
 
-  raw::typed_array_ref<std::uint16_t> new_array(std::size_t size,
-                                                std::uint16_t *) override {
-    return internal::from_jni(_env->NewCharArray(size),
-                              "new_array<std::uint16_t>");
+  local_ref<raw::typed_array_ref<std::uint16_t>>
+  new_array(std::size_t size, std::uint16_t *) override {
+    return make_local_ref(internal::from_jni(_env->NewCharArray(size),
+                                             "new_array<std::uint16_t>"));
   }
 
-  raw::typed_array_ref<std::int16_t> new_array(std::size_t size,
-                                               std::int16_t *) override {
-    return internal::from_jni(_env->NewShortArray(size),
-                              "new_array<std::int16_t>");
+  local_ref<raw::typed_array_ref<std::int16_t>>
+  new_array(std::size_t size, std::int16_t *) override {
+    return make_local_ref(internal::from_jni(_env->NewShortArray(size),
+                                             "new_array<std::int16_t>"));
   }
 
-  raw::typed_array_ref<std::int32_t> new_array(std::size_t size,
-                                               std::int32_t *) override {
-    return internal::from_jni(_env->NewIntArray(size),
-                              "new_array<std::int32_t>");
+  local_ref<raw::typed_array_ref<std::int32_t>>
+  new_array(std::size_t size, std::int32_t *) override {
+    return make_local_ref(
+        internal::from_jni(_env->NewIntArray(size), "new_array<std::int32_t>"));
   }
 
-  raw::typed_array_ref<std::int64_t> new_array(std::size_t size,
-                                               std::int64_t *) override {
-    return internal::from_jni(_env->NewLongArray(size),
-                              "new_array<std::int64_t>");
+  local_ref<raw::typed_array_ref<std::int64_t>>
+  new_array(std::size_t size, std::int64_t *) override {
+    return make_local_ref(internal::from_jni(_env->NewLongArray(size),
+                                             "new_array<std::int64_t>"));
   }
 
-  raw::typed_array_ref<float> new_array(std::size_t size, float *) override {
-    return internal::from_jni(_env->NewFloatArray(size), "new_array<float>");
+  local_ref<raw::typed_array_ref<float>> new_array(std::size_t size,
+                                                   float *) override {
+    return make_local_ref(
+        internal::from_jni(_env->NewFloatArray(size), "new_array<float>"));
   }
 
-  raw::typed_array_ref<double> new_array(std::size_t size, double *) override {
-    return internal::from_jni(_env->NewDoubleArray(size), "new_array<double>");
+  local_ref<raw::typed_array_ref<double>> new_array(std::size_t size,
+                                                    double *) override {
+    return make_local_ref(
+        internal::from_jni(_env->NewDoubleArray(size), "new_array<double>"));
   }
 
   std::size_t get_array_size(raw::array_ref array) override {
@@ -327,16 +336,16 @@ public:
   // string
   //
 
-  raw::string_ref new_string(const char *characters) override {
-    return internal::from_jni(_env->NewStringUTF(characters),
-                              "new_string<char>");
+  local_ref<raw::string_ref> new_string(const char *characters) override {
+    return make_local_ref(
+        internal::from_jni(_env->NewStringUTF(characters), "new_string<char>"));
   }
 
-  raw::string_ref new_string(const wchar_t *characters) override {
-    return internal::from_jni(
+  local_ref<raw::string_ref> new_string(const wchar_t *characters) override {
+    return make_local_ref(internal::from_jni(
         _env->NewString(reinterpret_cast<const jchar *>(characters),
                         std::wcslen(characters)),
-        "new_string<wchar_t>");
+        "new_string<wchar_t>"));
   }
 
   std::pair<const char *, std::size_t>
@@ -437,14 +446,14 @@ public:
                                    reinterpret_cast<const jvalue *>(values));
   }
 
-  raw::object_ref call_object_method(raw::object_ref instance,
-                                     raw::method_id mid,
-                                     const raw::value *values) override {
-    return internal::from_jni(
+  local_ref<raw::object_ref>
+  call_object_method(raw::object_ref instance, raw::method_id mid,
+                     const raw::value *values) override {
+    return make_local_ref(internal::from_jni(
         _env->CallObjectMethodA(internal::to_jni(instance),
                                 internal::to_jni(mid),
                                 reinterpret_cast<const jvalue *>(values)),
-        "call<raw::object_ref>");
+        "call<raw::object_ref>"));
   }
 
   void call_void_method(raw::object_ref instance, raw::method_id mid,
@@ -506,12 +515,13 @@ public:
                                    reinterpret_cast<const jvalue *>(values));
   }
 
-  raw::object_ref call_object_method(raw::class_ref cls, raw::method_id mid,
-                                     const raw::value *values) override {
-    return internal::from_jni(
+  local_ref<raw::object_ref>
+  call_object_method(raw::class_ref cls, raw::method_id mid,
+                     const raw::value *values) override {
+    return make_local_ref(internal::from_jni(
         _env->CallObjectMethodA(internal::to_jni(cls), internal::to_jni(mid),
                                 reinterpret_cast<const jvalue *>(values)),
-        "call<raw::object_ref>");
+        "call<raw::object_ref>"));
   }
 
   void call_void_method(raw::class_ref cls, raw::method_id mid,

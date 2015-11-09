@@ -24,7 +24,7 @@ public:
   // does nothing if obj == nullptr
   virtual void delete_global_ref(raw::object_ref obj) = 0;
 
-  virtual raw::class_ref find_class(const char *name) = 0;
+  virtual local_ref<raw::class_ref> find_class(const char *name) = 0;
 
   virtual raw::method_id get_method_id(raw::class_ref cls, const char *name,
                                        const char *signature) = 0;
@@ -33,18 +33,18 @@ public:
                                               const char *name,
                                               const char *signature) = 0;
 
-  virtual raw::class_ref get_object_class(raw::object_ref obj) = 0;
+  virtual local_ref<raw::class_ref> get_object_class(raw::object_ref obj) = 0;
 
-  virtual raw::object_ref new_object(raw::class_ref cls,
-                                     raw::method_id constructor,
-                                     const raw::value *arguments) = 0;
+  virtual local_ref<raw::object_ref>
+  new_object(raw::class_ref cls, raw::method_id constructor,
+             const raw::value *arguments) = 0;
 
   //
   // array methods
   //
-  virtual raw::typed_array_ref<raw::object_ref>
+  virtual local_ref<raw::typed_array_ref<raw::object_ref>>
   new_object_array(std::size_t size) = 0;
-  virtual raw::object_ref
+  virtual local_ref<raw::object_ref>
   get_object_array_index(raw::typed_array_ref<raw::object_ref> arr,
                          std::size_t index) = 0;
   virtual void set_object_array_index(raw::typed_array_ref<raw::object_ref> arr,
@@ -52,20 +52,22 @@ public:
                                       raw::object_ref obj) = 0;
 
   // second argument only used for overloading
-  virtual raw::typed_array_ref<bool> new_array(std::size_t size, bool *) = 0;
-  virtual raw::typed_array_ref<std::uint8_t> new_array(std::size_t size,
-                                                       std::uint8_t *) = 0;
-  virtual raw::typed_array_ref<std::uint16_t> new_array(std::size_t size,
-                                                        std::uint16_t *) = 0;
-  virtual raw::typed_array_ref<std::int16_t> new_array(std::size_t size,
-                                                       std::int16_t *) = 0;
-  virtual raw::typed_array_ref<std::int32_t> new_array(std::size_t size,
-                                                       std::int32_t *) = 0;
-  virtual raw::typed_array_ref<std::int64_t> new_array(std::size_t size,
-                                                       std::int64_t *) = 0;
-  virtual raw::typed_array_ref<float> new_array(std::size_t size, float *) = 0;
-  virtual raw::typed_array_ref<double> new_array(std::size_t size,
-                                                 double *) = 0;
+  virtual local_ref<raw::typed_array_ref<bool>> new_array(std::size_t size,
+                                                          bool *) = 0;
+  virtual local_ref<raw::typed_array_ref<std::uint8_t>>
+  new_array(std::size_t size, std::uint8_t *) = 0;
+  virtual local_ref<raw::typed_array_ref<std::uint16_t>>
+  new_array(std::size_t size, std::uint16_t *) = 0;
+  virtual local_ref<raw::typed_array_ref<std::int16_t>>
+  new_array(std::size_t size, std::int16_t *) = 0;
+  virtual local_ref<raw::typed_array_ref<std::int32_t>>
+  new_array(std::size_t size, std::int32_t *) = 0;
+  virtual local_ref<raw::typed_array_ref<std::int64_t>>
+  new_array(std::size_t size, std::int64_t *) = 0;
+  virtual local_ref<raw::typed_array_ref<float>> new_array(std::size_t size,
+                                                           float *) = 0;
+  virtual local_ref<raw::typed_array_ref<double>> new_array(std::size_t size,
+                                                            double *) = 0;
 
   virtual std::size_t get_array_size(raw::array_ref array) = 0;
 
@@ -113,8 +115,8 @@ public:
   // string
   //
 
-  virtual raw::string_ref new_string(const char *characters) = 0;
-  virtual raw::string_ref new_string(const wchar_t *characters) = 0;
+  virtual local_ref<raw::string_ref> new_string(const char *characters) = 0;
+  virtual local_ref<raw::string_ref> new_string(const wchar_t *characters) = 0;
 
   virtual std::pair<const char *, std::size_t>
   load_utf8_characters(raw::string_ref string) = 0;
@@ -154,9 +156,9 @@ public:
   virtual double call_double_method(raw::object_ref instance,
                                     raw::method_id mid,
                                     const raw::value *values) = 0;
-  virtual raw::object_ref call_object_method(raw::object_ref instance,
-                                             raw::method_id mid,
-                                             const raw::value *values) = 0;
+  virtual local_ref<raw::object_ref>
+  call_object_method(raw::object_ref instance, raw::method_id mid,
+                     const raw::value *values) = 0;
   virtual void call_void_method(raw::object_ref instance, raw::method_id mid,
                                 const raw::value *values) = 0;
 
@@ -180,9 +182,9 @@ public:
                                   const raw::value *values) = 0;
   virtual double call_double_method(raw::class_ref cls, raw::method_id mid,
                                     const raw::value *values) = 0;
-  virtual raw::object_ref call_object_method(raw::class_ref cls,
-                                             raw::method_id mid,
-                                             const raw::value *values) = 0;
+  virtual local_ref<raw::object_ref>
+  call_object_method(raw::class_ref cls, raw::method_id mid,
+                     const raw::value *values) = 0;
   virtual void call_void_method(raw::class_ref cls, raw::method_id mid,
                                 const raw::value *values) = 0;
 
