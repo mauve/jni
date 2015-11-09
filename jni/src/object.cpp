@@ -32,8 +32,7 @@ struct method_cache {
         wait3{cls, "wait"} {}
 
   static method_cache &get() {
-    static method_cache cache{
-        Class{environment::current().find_class("java/lang/Object")}};
+    static method_cache cache{Class::forName("java/lang/Object")};
     return cache;
   }
 };

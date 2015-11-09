@@ -18,16 +18,13 @@ struct method_cache {
   raw::method<local_ref<raw::object_ref>()> newInstance;
   raw::method<local_ref<raw::object_ref>()> getClassLoader;
 
-  method_cache(environment &env, raw::class_ref cls)
-      : newInstance{env, cls, "newInstance"},
-        getClassLoader{env.get_method_id(cls, "getClassLoader",
-                                         "()Ljava/lang/ClassLoader;")} {}
+  method_cache(Class cls)
+      : newInstance{cls, "newInstance"},
+        getClassLoader{
+            cls.getMethod("getClassLoader", "()Ljava/lang/ClassLoader;")} {}
 
   static method_cache &get() {
-    static method_cache cache{[]() {
-      auto cls = environment::current().find_class("java/lang/Class");
-      return method_cache{environment::current(), cls.raw()};
-    }()};
+    static method_cache cache{Class::forName("java/lang/Class")};
     return cache;
   }
 };

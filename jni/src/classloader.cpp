@@ -14,11 +14,10 @@ namespace {
 struct method_cache {
   raw::method<local_ref<raw::class_ref>(raw::string_ref)> loadClass;
 
-  method_cache(const local_ref<raw::class_ref>& cls)
-      : loadClass{environment::current(), cls.raw(), "loadClass"} {}
+  method_cache(Class cls) : loadClass{cls, "loadClass"} {}
 
   static method_cache &get() {
-    static method_cache cache{environment::current().find_class("java/lang/ClassLoader")};
+    static method_cache cache{Class::forName("java/lang/ClassLoader")};
     return cache;
   }
 };
@@ -41,8 +40,8 @@ ClassLoader::~ClassLoader() = default;
 
 Class ClassLoader::loadClass(const std::string &name) {
   modified_utf8_string jname{name.c_str()};
-  return Class{ method_cache::get().loadClass(
-    environment::current(), ref(), jname.ref()) };
+  return Class{method_cache::get().loadClass(environment::current(), ref(),
+                                             jname.ref())};
 }
 
 } // namespace lang
