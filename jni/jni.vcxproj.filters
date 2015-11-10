@@ -54,6 +54,9 @@
     <ClCompile Include="src\throw_if_exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\object_ref_array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\jni\java\lang\class.hpp">
@@ -123,6 +126,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\jni\detail\throw_if_exception.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\raw\object_ref_array.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

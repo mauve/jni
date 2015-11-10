@@ -40,34 +40,30 @@ DEFINE_DISPATCHER(double, call_double_method)
 DEFINE_DISPATCHER(local_ref<object_ref>, call_object_method)
 
 #undef DEFINE_DISPATCHER
+#define DEFINE_OBJECT_DISPATCHER(ref_type)                                     \
+  \
+template<> inline static local_ref<ref_type>                                   \
+  dispatcher<local_ref<ref_type>>::call(environment &env, object_ref instance, \
+                                        method_id mid, const value *pack) {    \
+    auto result = env.call_object_method(instance, mid, pack);                 \
+    throw_if_exception();                                                      \
+    return result.cast<ref_type>();                                            \
+  \
+}
+
+DEFINE_OBJECT_DISPATCHER(string_ref)
+DEFINE_OBJECT_DISPATCHER(class_ref)
+DEFINE_OBJECT_DISPATCHER(throwable_ref)
+DEFINE_OBJECT_DISPATCHER(typed_array_ref<object_ref>)
+DEFINE_OBJECT_DISPATCHER(typed_array_ref<string_ref>)
+DEFINE_OBJECT_DISPATCHER(typed_array_ref<class_ref>)
+DEFINE_OBJECT_DISPATCHER(typed_array_ref<throwable_ref>)
 
 template <>
 inline static void dispatcher<void>::call(environment &env, object_ref instance,
                                           method_id mid, const value *pack) {
   env.call_void_method(instance, mid, pack);
   throw_if_exception();
-}
-
-template <>
-inline static local_ref<string_ref>
-dispatcher<local_ref<string_ref>>::call(environment &env, object_ref instance,
-                                        method_id mid, const value *pack) {
-  return local_ref<string_ref>{env.call_object_method(instance, mid, pack)};
-}
-
-template <>
-inline static local_ref<class_ref>
-dispatcher<local_ref<class_ref>>::call(environment &env, object_ref instance,
-                                       method_id mid, const value *pack) {
-  return local_ref<class_ref>{env.call_object_method(instance, mid, pack)};
-}
-
-template <>
-inline static local_ref<throwable_ref>
-dispatcher<local_ref<throwable_ref>>::call(environment &env,
-                                           object_ref instance, method_id mid,
-                                           const value *pack) {
-  return local_ref<throwable_ref>{env.call_object_method(instance, mid, pack)};
 }
 
 } // namespace detail

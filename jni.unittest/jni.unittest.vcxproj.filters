@@ -42,8 +42,12 @@
     <ClCompile Include="test_throwable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_object_ref_array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="classes\MethodTest.java" />
+    <None Include="classes\ObjectRefArray.java" />
   </ItemGroup>
 </Project>

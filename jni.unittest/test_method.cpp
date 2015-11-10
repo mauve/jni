@@ -12,8 +12,8 @@ template <typename T>
 void test_call_method(const char *name, std::initializer_list<T> test_values) {
   auto cls = jni::java::lang::Class::forName("MethodTest");
   auto mid = cls.getMethod<T(T)>(name);
-  BOOST_REQUIRE_MESSAGE(mid != nullptr, "no named named " << name
-                                                          << " on MethodTest");
+  BOOST_REQUIRE_MESSAGE(mid != nullptr, "no method named " << name
+                                                           << " on MethodTest");
 
   auto instance = cls.newInstance();
 

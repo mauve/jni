@@ -141,12 +141,12 @@ inline global_ref<T>::global_ref(global_ref &&other)
 template <typename T>
 template <typename U>
 inline global_ref<T>::global_ref(const local_ref<U> &other)
-    : _ref(new_ref(static_cast<T>(other.raw()))) {}
+    : _ref(new_ref(reinterpret_cast<T>(other.raw()))) {}
 
 template <typename T>
 template <typename U>
 inline global_ref<T>::global_ref(local_ref<U> &&other)
-    : _ref(new_ref(static_cast<T>(other.raw()))) {
+    : _ref(new_ref(reinterpret_cast<T>(other.raw()))) {
   other.release();
 }
 

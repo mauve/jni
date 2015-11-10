@@ -159,6 +159,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test_array.cpp" />
     <ClCompile Include="test_java_object.cpp" />
+    <ClCompile Include="test_object_ref_array.cpp" />
     <ClCompile Include="test_signature.cpp" />
     <ClCompile Include="test_string.cpp" />
     <ClCompile Include="test_throwable.cpp" />
@@ -171,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="classes\MethodTest.java" />
+    <None Include="classes\ObjectRefArray.java" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

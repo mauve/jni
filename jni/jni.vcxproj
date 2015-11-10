@@ -165,6 +165,7 @@
     <ClCompile Include="src\init.cpp" />
     <ClCompile Include="src\internal\ref_converter.cpp" />
     <ClCompile Include="src\object.cpp" />
+    <ClCompile Include="src\object_ref_array.cpp" />
     <ClCompile Include="src\string.cpp" />
     <ClCompile Include="src\throwable.cpp" />
     <ClCompile Include="src\throw_if_exception.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="include\jni\init.hpp" />
     <ClInclude Include="include\jni\java\lang\classloader.hpp" />
     <ClInclude Include="include\jni\java\lang\throwable.hpp" />
+    <ClInclude Include="include\jni\raw\object_ref_array.hpp" />
     <ClInclude Include="include\jni\raw\field.hpp" />
     <ClInclude Include="include\jni\raw\ref_holder.hpp" />
     <ClInclude Include="include\jni\java\lang\class.hpp" />

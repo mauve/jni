@@ -7,7 +7,7 @@
 struct embed_vm_fixture {
   embed_vm_fixture() {
     auto args = jni::vm::get_default_init_args();
-    args.options.push_back(std::make_pair("-Djava.class.path=C:\\Users\\Mikael\\DEV\\other-repositories\\jni\\Debug\\MethodTest.jar", nullptr));
+    args.options.push_back(std::make_pair("-Djava.class.path=C:\\Users\\Mikael\\DEV\\other-repositories\\jni\\Debug\\UnitTest.jar", nullptr));
 
     auto result = jni::vm::create_vm(args);
     if (result) {
