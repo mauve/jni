@@ -45,6 +45,7 @@ BOOST_AUTO_TEST_CASE(load_class) {
 }
 
 BOOST_AUTO_TEST_CASE(define_class) {
+  // TODO: fix path
   auto class_buffer = loadClassFromFile("..\\Debug\\DefineClass.class");
 
   auto ldr = ClassLoader::getSystemClassLoader();
