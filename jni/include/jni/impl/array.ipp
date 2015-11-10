@@ -26,8 +26,7 @@ inline array<T>::array(local_ref<raw::typed_array_ref<T>> &&ref)
 
 template <typename T>
 inline array<T>::array(array &&other)
-    : _ref(std::move(other._ref)),
-      _elements(std::move(other._elements)) {
+    : _ref(std::move(other._ref)), _elements(std::move(other._elements)) {
   other._elements.first = nullptr;
   other._elements.second = 0;
 }
@@ -128,6 +127,11 @@ template <typename T> const T *array<T>::data() const {
 
 template <typename T> bool array<T>::loaded() const {
   return _elements.first != nullptr;
+}
+
+template <typename T>
+inline raw::object_ref extract_reference(const array<T> &arr) {
+  return reinterpret_cast<raw::object_ref>(arr._ref.raw());
 }
 
 } // namespace jni

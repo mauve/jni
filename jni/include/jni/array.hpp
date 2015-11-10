@@ -48,6 +48,9 @@ public:
 
   bool loaded() const;
 
+  template <typename T>
+  friend raw::object_ref extract_reference(const array<T>& arr);
+
 private:
   local_ref<raw::typed_array_ref<T>> _ref;
   std::pair<T*, std::size_t> _elements;
