@@ -33,8 +33,6 @@ public:
   add_local_ref_t<R> operator()(environment &env, object_ref instance,
                                 CallingArgs... args);
 
-  void locateMethod(java::lang::Class &cls, const char *name);
-
 private:
   method_id _mid;
 };

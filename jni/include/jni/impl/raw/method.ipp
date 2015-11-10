@@ -88,9 +88,8 @@ inline method<R(Args...)>::method(environment &env, raw::class_ref cls,
 }
 
 template <typename R, typename... Args>
-inline method<R(Args...)>::method(java::lang::Class &cls, const char *name) {
-  locateMethod(cls, name);
-}
+inline method<R(Args...)>::method(java::lang::Class &cls, const char *name)
+    : _mid{cls.getMethod<R(Args...)>(name)} {}
 
 template <typename R, typename... Args>
 template <typename... CallingArgs>
@@ -107,12 +106,6 @@ operator()(environment &env, object_ref instance, CallingArgs... args) {
 
   return detail::dispatcher<add_local_ref_t<R>>::call(env, instance, _mid,
                                                       pack.data());
-}
-
-template <typename R, typename... Args>
-void method<R(Args...)>::locateMethod(java::lang::Class &cls,
-                                      const char *name) {
-  _mid = cls.getMethod<R(Args...)>(name);
 }
 
 } // namespace raw
