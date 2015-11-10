@@ -26,6 +26,7 @@ void test_call_method(const char *name, std::initializer_list<T> test_values) {
   }
 }
 
+BOOST_AUTO_TEST_SUITE(raw_tests)
 BOOST_AUTO_TEST_SUITE(method_tests)
 
 BOOST_AUTO_TEST_CASE(call_boolean_method) {
@@ -97,4 +98,5 @@ BOOST_AUTO_TEST_CASE(call_double_method) {
   }
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END() // method_tests
+BOOST_AUTO_TEST_SUITE_END() // raw_tests

@@ -19,7 +19,8 @@ using jni::raw::throwable_ref;
 
 using jni::local_ref;
 
-BOOST_AUTO_TEST_SUITE(test_signature)
+BOOST_AUTO_TEST_SUITE(raw_tests)
+BOOST_AUTO_TEST_SUITE(signature_tests)
 
 BOOST_AUTO_TEST_CASE(builtin_types_empty_args) {
   BOOST_TEST(g<void()>() == "()V");
@@ -94,4 +95,5 @@ BOOST_AUTO_TEST_CASE(all_builtin_args_return_void) {
              "Class;Ljava/lang/Throwable;)V");
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END() // signature_tests
+BOOST_AUTO_TEST_SUITE_END() // raw_tests
