@@ -131,6 +131,9 @@
     <ClInclude Include="include\jni\raw\object_ref_array.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\jni\jni.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\jni\impl\array.ipp" />

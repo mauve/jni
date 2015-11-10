@@ -5,6 +5,7 @@
 #include <jni/raw/types.hpp>
 
 #include <cstddef>
+#include <utility>
 
 namespace jni {
 

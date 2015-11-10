@@ -19,4 +19,6 @@ public class MethodTest {
   public String stringMethod(String input) { return input; }
 
   public Object objectMethod(Object input) { return input; }
+
+  // TODO add array tests
 }
