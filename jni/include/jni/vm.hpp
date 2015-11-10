@@ -25,12 +25,12 @@ public:
 
   virtual boost::system::error_code
   attach_current_thread(const std::string &thread_name, api_version version,
-                        raw::object_ref group, void** env) = 0;
+                        raw::object_ref group, void **env) = 0;
 
   virtual boost::system::error_code
   attach_current_thread_as_daemon(const std::string &thread_name,
-                                  api_version version,
-                                  raw::object_ref group, void **env) = 0;
+                                  api_version version, raw::object_ref group,
+                                  void **env) = 0;
 
   virtual boost::system::error_code detach_current_thread() = 0;
 
@@ -50,6 +50,23 @@ public:
 
   // used by jni::init::on_load to register the vm
   static void set_vm(void *);
+};
+
+class JNI_EXPORT embedded_vm {
+public:
+  embedded_vm();
+  embedded_vm(embedded_vm &&other);
+  ~embedded_vm();
+
+  embedded_vm &operator=(embedded_vm &&other);
+
+  void destroy();
+
+  embedded_vm(const embedded_vm &) = delete;
+  embedded_vm &operator=(const embedded_vm &) = delete;
+
+private:
+  bool _destroyed;
 };
 
 } // namespace jni

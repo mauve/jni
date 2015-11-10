@@ -122,7 +122,7 @@ vm::~vm() {}
 vm &vm::current() { return impl::global_vm; }
 
 vm::init_args vm::get_default_init_args() {
-  JavaVMInitArgs jni_args = { 0 };
+  JavaVMInitArgs jni_args = {0};
   jni_args.version = static_cast<jint>(api_version::v1_4);
   auto result = static_cast<error_codes>(
       JNI_GetDefaultJavaVMInitArgs(reinterpret_cast<void *>(&jni_args)));
@@ -139,10 +139,11 @@ vm::init_args vm::get_default_init_args() {
                                           jni_args.options[i].extraInfo));
   }
 
-/*  args.options.push_back(std::make_pair("-verbose", nullptr));
-  args.options.push_back(std::make_pair("-verbose:jni", nullptr));
-  args.options.push_back(std::make_pair("-Djava.library.path=C:\\Users\\Mikael\\.vulcan\\cache\\jdk1.8.0_60-win32.zip-ef26bd8bc0fd88a0b7ebe8eb8f7328aa8d9bf9c4\\extracted\\jdk\\jre\\bin", nullptr));
-*/
+  /*  args.options.push_back(std::make_pair("-verbose", nullptr));
+    args.options.push_back(std::make_pair("-verbose:jni", nullptr));
+    args.options.push_back(std::make_pair("-Djava.library.path=C:\\Users\\Mikael\\.vulcan\\cache\\jdk1.8.0_60-win32.zip-ef26bd8bc0fd88a0b7ebe8eb8f7328aa8d9bf9c4\\extracted\\jdk\\jre\\bin",
+    nullptr));
+  */
   return args;
 }
 
@@ -153,7 +154,7 @@ vm::create_vm(const init_args &args /* = get_default_init_args() */) {
   jni_args.version = static_cast<jint>(args.version);
 
   std::vector<JavaVMOption> options;
-  for (const auto& opt : args.options) {
+  for (const auto &opt : args.options) {
     JavaVMOption option;
     option.optionString = _strdup(opt.first.c_str());
     option.extraInfo = opt.second;
@@ -182,6 +183,40 @@ vm::create_vm(const init_args &args /* = get_default_init_args() */) {
 
 void vm::set_vm(void *vm) {
   impl::global_vm.attach(reinterpret_cast<JavaVM *>(vm), false);
+}
+
+//
+// embedded_vm
+//
+embedded_vm::embedded_vm() : _destroyed(true) {
+  auto result = vm::create_vm();
+  if (result) {
+    throw boost::system::system_error{result, "Cannot create Java VM"};
+  }
+  _destroyed = false;
+}
+
+embedded_vm::embedded_vm(embedded_vm &&other) : _destroyed{other._destroyed} {
+  other._destroyed = true;
+}
+
+embedded_vm::~embedded_vm() { destroy(); }
+
+embedded_vm &embedded_vm::operator=(embedded_vm &&other) {
+  destroy();
+  _destroyed = other._destroyed;
+  other._destroyed = true;
+  return *this;
+}
+
+void embedded_vm::destroy() {
+  if (_destroyed) {
+    return;
+  }
+
+  vm::current().destroy();
+
+  _destroyed = true;
 }
 
 } // namespace jni
