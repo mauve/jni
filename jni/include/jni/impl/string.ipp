@@ -85,9 +85,4 @@ inline typename basic_string<Impl>::const_iterator basic_string<Impl>::cend() co
   return end();
 }
 
-template <typename Impl>
-inline raw::string_ref basic_string<Impl>::ref() {
-  return _ref.raw();
-}
-
 } // namespace jni

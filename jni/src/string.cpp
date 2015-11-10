@@ -216,4 +216,12 @@ std::wostream &operator<<(std::wostream &os,
   return os << str.c_str();
 }
 
+raw::string_ref extract_reference(const basic_string<impl::modified_utf8> &str) {
+  return str._ref.raw();
+}
+
+raw::string_ref extract_reference(const basic_string<impl::modified_utf16> &str) {
+  return str._ref.raw();
+}
+
 } // namespace jni

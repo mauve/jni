@@ -61,7 +61,8 @@ public:
   const_iterator cbegin() const;
   const_iterator cend() const;
 
-  raw::string_ref ref();
+  friend JNI_EXPORT raw::string_ref extract_reference(const basic_string<impl::modified_utf8> &str);
+  friend JNI_EXPORT raw::string_ref extract_reference(const basic_string<impl::modified_utf16> &str);
 
 private:
   global_ref<raw::string_ref> _ref;

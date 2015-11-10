@@ -60,14 +60,16 @@ Class ClassLoader::defineClass(const std::string &name,
   buffer.commit();
 
   return Class{method_cache::get().defineClass(
-      environment::current(), extract_reference(*this), jname.ref(),
-      extract_reference(buffer), (std::int32_t)0, (std::int32_t)buffer_size)};
+      environment::current(), extract_reference(*this),
+      extract_reference(jname), extract_reference(buffer), (std::int32_t)0,
+      (std::int32_t)buffer_size)};
 }
 
 Class ClassLoader::loadClass(const std::string &name) {
   modified_utf8_string jname{name.c_str()};
-  return Class{method_cache::get().loadClass(
-      environment::current(), extract_reference(*this), jname.ref())};
+  return Class{method_cache::get().loadClass(environment::current(),
+                                             extract_reference(*this),
+                                             extract_reference(jname))};
 }
 
 ClassLoader ClassLoader::getSystemClassLoader() {
