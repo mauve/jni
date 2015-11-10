@@ -154,16 +154,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="test_java_class.cpp" />
-    <ClCompile Include="test_method.cpp" />
+    <ClCompile Include="java\lang\test_class.cpp" />
+    <ClCompile Include="raw\test_method.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test_array.cpp" />
-    <ClCompile Include="test_java_object.cpp" />
-    <ClCompile Include="test_object_ref_array.cpp" />
-    <ClCompile Include="test_signature.cpp" />
+    <ClCompile Include="java\lang\test_object.cpp" />
+    <ClCompile Include="raw\test_object_ref_array.cpp" />
+    <ClCompile Include="raw\test_signature.cpp" />
     <ClCompile Include="test_string.cpp" />
-    <ClCompile Include="test_throwable.cpp" />
-    <ClCompile Include="test_types.cpp" />
+    <ClCompile Include="java\lang\test_throwable.cpp" />
+    <ClCompile Include="raw\test_types.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\jni\jni.vcxproj">

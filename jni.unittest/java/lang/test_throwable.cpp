@@ -27,6 +27,8 @@ template <typename Callable> Throwable catch_throwable(Callable &&f) {
   throw std::runtime_error("Expected an exception.");
 }
 
+BOOST_AUTO_TEST_SUITE(java_tests)
+BOOST_AUTO_TEST_SUITE(lang_tests)
 BOOST_AUTO_TEST_SUITE(throwable_tests)
 
 BOOST_AUTO_TEST_CASE(class_not_found_exception) {
@@ -49,7 +51,7 @@ BOOST_AUTO_TEST_CASE(print_stack_trace_to_stream) {
 
 BOOST_AUTO_TEST_CASE(check_real_class_name) {
   Throwable throwable =
-    catch_throwable([]() { Class::forName("ThisClassShouldNotExist"); });
+      catch_throwable([]() { Class::forName("ThisClassShouldNotExist"); });
 
   auto cls = throwable.getClass();
   BOOST_TEST(cls.getName() == "java.lang.NoClassDefFoundError");
@@ -57,11 +59,13 @@ BOOST_AUTO_TEST_CASE(check_real_class_name) {
 
 BOOST_AUTO_TEST_CASE(get_cause) {
   Throwable throwable =
-    catch_throwable([]() { Class::forName("ThisClassShouldNotExist"); });
+      catch_throwable([]() { Class::forName("ThisClassShouldNotExist"); });
 
   auto cause = throwable.getCause();
   BOOST_TEST((cause != nullptr));
   BOOST_TEST(cause.getClass().getName() == "java.lang.ClassNotFoundException");
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END() // throwable_tests
+BOOST_AUTO_TEST_SUITE_END() // lang_tests
+BOOST_AUTO_TEST_SUITE_END() // java_tests

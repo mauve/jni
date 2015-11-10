@@ -8,7 +8,9 @@
 #include <sstream>
 #include <string>
 
-BOOST_AUTO_TEST_SUITE(java_object_tests)
+BOOST_AUTO_TEST_SUITE(java_tests)
+BOOST_AUTO_TEST_SUITE(lang_tests)
+BOOST_AUTO_TEST_SUITE(object_tests)
 
 BOOST_AUTO_TEST_CASE(create) {
   jni::local_ref<jni::raw::object_ref> ref{
@@ -64,4 +66,6 @@ BOOST_AUTO_TEST_CASE(equals) {
   BOOST_TEST(obj3 != obj1);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END() // object_tests
+BOOST_AUTO_TEST_SUITE_END() // lang_tests
+BOOST_AUTO_TEST_SUITE_END() // java_tests

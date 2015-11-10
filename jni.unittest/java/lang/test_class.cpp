@@ -6,7 +6,9 @@
 
 using jni::java::lang::Class;
 
-BOOST_AUTO_TEST_SUITE(java_class_tests)
+BOOST_AUTO_TEST_SUITE(java_tests)
+BOOST_AUTO_TEST_SUITE(lang_tests)
+BOOST_AUTO_TEST_SUITE(class_tests)
 
 BOOST_AUTO_TEST_CASE(get_builtin_class) {
   BOOST_CHECK_NO_THROW(auto cls = Class::forName("java/lang/String"));
@@ -130,4 +132,6 @@ BOOST_AUTO_TEST_CASE(object_equals) {
   BOOST_TEST(str.equals(str_copy));
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END() // class_tests
+BOOST_AUTO_TEST_SUITE_END() // lang_tests
+BOOST_AUTO_TEST_SUITE_END() // java_tests
