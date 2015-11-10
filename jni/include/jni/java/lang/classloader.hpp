@@ -23,6 +23,8 @@ public:
   ClassLoader(ClassLoader &&other);
   virtual ~ClassLoader();
 
+  Class defineClass(const std::string &name, const std::uint8_t *begin,
+                    const std::uint8_t *end);
   Class loadClass(const std::string &name);
 
 private:
