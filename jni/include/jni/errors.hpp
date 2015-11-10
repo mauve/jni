@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include <jni/config.hpp>
+
 #include <boost/system/error_code.hpp>
 
 namespace jni {
@@ -19,9 +21,9 @@ enum class error_codes {
   vm_destroyed = 1
 };
 
-boost::system::error_category &get_error_category();
+JNI_EXPORT boost::system::error_category &get_error_category();
 
-boost::system::error_code make_error_code(error_codes jni_error);
+JNI_EXPORT boost::system::error_code make_error_code(error_codes jni_error);
 
 } // namespace jni
 
