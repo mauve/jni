@@ -99,7 +99,9 @@ void Object::wait(const boost::chrono::nanoseconds &timeout) const {
                             static_cast<std::int32_t>(remainder.count()));
 }
 
-raw::object_ref Object::ref() const { return _ref.raw(); }
+raw::object_ref extract_reference(const Object &object) {
+  return object._ref.raw();
+}
 
 bool operator==(const Object &left, const Object &right) {
   return left.equals(right);
@@ -110,19 +112,19 @@ bool operator!=(const Object &left, const Object &right) {
 }
 
 bool operator==(const Object &left, std::nullptr_t) {
-  return left.ref() == nullptr;
+  return extract_reference(left) == nullptr;
 }
 
 bool operator==(std::nullptr_t, const Object &right) {
-  return nullptr == right.ref();
+  return nullptr == extract_reference(right);
 }
 
 bool operator!=(const Object &left, std::nullptr_t) {
-  return left.ref() != nullptr;
+  return extract_reference(left) != nullptr;
 }
 
 bool operator!=(std::nullptr_t, const Object &right) {
-  return nullptr != right.ref();
+  return nullptr != extract_reference(right);
 }
 
 std::ostream &operator<<(std::ostream &os, const Object &object) {

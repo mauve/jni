@@ -79,17 +79,14 @@ inline method<R(Args...)>::method(environment &env, raw::class_ref cls,
   signature<add_local_ref_t<R>(add_local_ref_t<Args>...)> signature;
 
   _mid = env.get_method_id(cls, name, signature.get());
-  if (!_mid) {
-    // TODO better error
-    throw std::runtime_error(std::string{"method '"} + name +
-                             "' with signature '" + signature.get() +
-                             "' not found");
-  }
+  throw_if_exception();
 }
 
 template <typename R, typename... Args>
 inline method<R(Args...)>::method(java::lang::Class &cls, const char *name)
-    : _mid{cls.getMethod<R(Args...)>(name)} {}
+    : _mid{cls.getMethod<R(Args...)>(name)} {
+  throw_if_exception();
+}
 
 template <typename R, typename... Args>
 template <typename... CallingArgs>

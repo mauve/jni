@@ -67,37 +67,37 @@ Throwable &Throwable::operator=(const Throwable &other) = default;
 Throwable &Throwable::operator=(Throwable &&other) = default;
 
 void Throwable::addSuppressed(const Throwable &exception) {
-  method_cache::get().addSuppressed(environment::current(), ref(),
-                                    exception.ref());
+  method_cache::get().addSuppressed(environment::current(), extract_reference(*this),
+                                    extract_reference(exception));
 }
 
 Throwable Throwable::fillInStackTrace() {
   return Throwable{
-      method_cache::get().fillInStackTrace(environment::current(), ref())};
+      method_cache::get().fillInStackTrace(environment::current(), extract_reference(*this))};
 }
 
 Throwable Throwable::getCause() const {
-  return Throwable{method_cache::get().getCause(environment::current(), ref())};
+  return Throwable{method_cache::get().getCause(environment::current(), extract_reference(*this))};
 }
 
 std::string Throwable::getLocalizedMessage() const {
   return to_string(
-      method_cache::get().getLocalizedMessage(environment::current(), ref()));
+      method_cache::get().getLocalizedMessage(environment::current(), extract_reference(*this)));
 }
 
 std::string Throwable::getMessage() const {
   return to_string(
-      method_cache::get().getMessage(environment::current(), ref()));
+      method_cache::get().getMessage(environment::current(), extract_reference(*this)));
 }
 
 Throwable Throwable::initCause(const Throwable &cause) {
-  return Throwable{method_cache::get().initCause(environment::current(), ref(),
-                                                 cause.ref())};
+  return Throwable{method_cache::get().initCause(environment::current(), extract_reference(*this),
+                                                 extract_reference(cause))};
 }
 
 void Throwable::printStackTrace() const {
   environment::current().clear_exceptions();
-  method_cache::get().printStackTrace(environment::current(), ref());
+  method_cache::get().printStackTrace(environment::current(), extract_reference(*this));
 }
 
 void Throwable::printStackTrace(std::ostream &s) const {
@@ -108,12 +108,12 @@ void Throwable::printStackTrace(std::ostream &s) const {
       print_writer_class.getMethod("<init>", "(Ljava/io/Writer;)V");
 
   std::array<raw::value, 1> constructor_args{
-      raw::to_value(string_writer.ref())};
+      raw::to_value(extract_reference(string_writer))};
   auto print_writer = environment::current().new_object(
-      static_cast<raw::class_ref>(print_writer_class.ref()),
+      reinterpret_cast<raw::class_ref>(extract_reference(print_writer_class)),
       print_writer_constructor, constructor_args.data());
 
-  method_cache::get().printStackTrace2(environment::current(), ref(),
+  method_cache::get().printStackTrace2(environment::current(), extract_reference(*this),
                                        print_writer);
 
   s << string_writer.toString();

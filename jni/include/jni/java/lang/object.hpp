@@ -41,7 +41,7 @@ public:
   void wait(const boost::chrono::milliseconds &timeout) const;
   void wait(const boost::chrono::nanoseconds &timeout) const;
 
-  raw::object_ref ref() const;
+  friend JNI_EXPORT raw::object_ref extract_reference(const Object& obj);
 
 private:
   friend class Monitor;

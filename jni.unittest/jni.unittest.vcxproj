@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="java\lang\test_class.cpp" />
+    <ClCompile Include="java\lang\test_classloader.cpp" />
     <ClCompile Include="raw\test_method.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test_array.cpp" />
@@ -171,6 +172,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="classes\DefineClass.java" />
     <None Include="classes\MethodTest.java" />
     <None Include="classes\ObjectRefArray.java" />
   </ItemGroup>

@@ -38,18 +38,21 @@ public:
   // Creates a new instance of the class represented by this Class object.
   Object newInstance() const;
 
-  // Returns the name of the entity(class, interface, array class, primitive type, or void) represented by this Class object, as a String.
+  // Returns the name of the entity(class, interface, array class, primitive
+  // type, or void) represented by this Class object, as a String.
   // For example: java.lang.String
   std::string getName() const;
 
-  // Returns the simple name of the underlying class as given in the source code.
+  // Returns the simple name of the underlying class as given in the source
+  // code.
   // For example: String
   std::string getSimpleName() const;
 
   // Returns true if this Class object represents an annotation type.
   bool isAnnotation() const;
 
-  // Returns true if an annotation for the specified type is present on this element, else false.
+  // Returns true if an annotation for the specified type is present on this
+  // element, else false.
   bool isAnnotationPresent(const Class &annotationClass);
 
   // Returns true if and only if the underlying class is an anonymous class.
@@ -58,13 +61,17 @@ public:
   // Determines if this Class object represents an array class.
   bool isArray() const;
 
-  // Determines if the class or interface represented by this Class object is either the same as, or is a superclass or superinterface of, the class or interface represented by the specified Class parameter.
+  // Determines if the class or interface represented by this Class object is
+  // either the same as, or is a superclass or superinterface of, the class or
+  // interface represented by the specified Class parameter.
   bool isAssignableFrom(const Class &cls) const;
 
-  // Returns true if and only if this class was declared as an enum in the source code.
+  // Returns true if and only if this class was declared as an enum in the
+  // source code.
   bool isEnum() const;
 
-  // Determines if the specified Object is assignment - compatible with the object represented by this Class.
+  // Determines if the specified Object is assignment - compatible with the
+  // object represented by this Class.
   bool isInstance(const Object &obj) const;
 
   // Determines if the specified Class object represents an interface type.
@@ -89,6 +96,8 @@ inline raw::method_id Class::getMethod(const char *name) {
 
   return this->getMethod(name, signature.get());
 }
+
+raw::class_ref extract_reference(const Class &cls);
 
 } // namespace lang
 } // namespace java

@@ -188,7 +188,6 @@
     <ClInclude Include="include\jni\raw\extract_reference.hpp" />
     <ClInclude Include="include\jni\raw\object_ref_array.hpp" />
     <ClInclude Include="include\jni\raw\field.hpp" />
-    <ClInclude Include="include\jni\raw\ref_holder.hpp" />
     <ClInclude Include="include\jni\java\lang\class.hpp" />
     <ClInclude Include="include\jni\environment.hpp" />
     <ClInclude Include="include\jni\java\lang\object.hpp" />
@@ -206,7 +205,6 @@
     <None Include="include\jni\impl\init.ipp" />
     <None Include="include\jni\impl\raw\field.ipp" />
     <None Include="include\jni\impl\raw\method.ipp" />
-    <None Include="include\jni\impl\raw\ref_holder.ipp" />
     <None Include="include\jni\impl\ref.ipp" />
     <None Include="include\jni\impl\raw\signature.ipp" />
     <None Include="include\jni\impl\string.ipp" />

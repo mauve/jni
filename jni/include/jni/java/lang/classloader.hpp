@@ -27,6 +27,8 @@ public:
                     const std::uint8_t *end);
   Class loadClass(const std::string &name);
 
+  static ClassLoader getSystemClassLoader();
+
 private:
   friend class global_initialization;
   static void global_init_hook(environment &env);

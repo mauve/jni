@@ -45,6 +45,9 @@
     <ClCompile Include="java\lang\test_object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="java\lang\test_classloader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="classes\MethodTest.java" />

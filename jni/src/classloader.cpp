@@ -13,13 +13,17 @@ namespace lang {
 namespace {
 
 struct method_cache {
-  raw::method<local_ref<raw::object_ref>(
+  raw::method<local_ref<raw::class_ref>(
       raw::string_ref, raw::typed_array_ref<std::uint8_t>, std::int32_t,
       std::int32_t)> defineClass;
   raw::method<local_ref<raw::class_ref>(raw::string_ref)> loadClass;
+  raw::method_id getSystemClassLoader;
 
   method_cache(Class cls)
-      : defineClass{cls, "defineClass"}, loadClass{cls, "loadClass"} {}
+      : defineClass{cls, "defineClass"}, loadClass{cls, "loadClass"},
+        getSystemClassLoader{environment::current().get_static_method_id(
+            extract_reference(cls), "getSystemClassLoader",
+            "()Ljava/lang/ClassLoader;")} {}
 
   static method_cache &get() {
     static method_cache cache{Class::forName("java/lang/ClassLoader")};
@@ -56,14 +60,25 @@ Class ClassLoader::defineClass(const std::string &name,
   buffer.commit();
 
   return Class{method_cache::get().defineClass(
-      environment::current(), ref(), jname.ref(), extract_reference(buffer),
-      (std::int32_t)0, (std::int32_t)buffer_size)};
+      environment::current(), extract_reference(*this), jname.ref(),
+      extract_reference(buffer), (std::int32_t)0, (std::int32_t)buffer_size)};
 }
 
 Class ClassLoader::loadClass(const std::string &name) {
   modified_utf8_string jname{name.c_str()};
-  return Class{method_cache::get().loadClass(environment::current(), ref(),
-                                             jname.ref())};
+  return Class{method_cache::get().loadClass(
+      environment::current(), extract_reference(*this), jname.ref())};
+}
+
+ClassLoader ClassLoader::getSystemClassLoader() {
+  auto cls = Class::forName("java/lang/ClassLoader");
+
+  // TODO create raw::static_method
+  auto obj = environment::current().call_object_method(
+      extract_reference(cls), method_cache::get().getSystemClassLoader,
+      nullptr);
+  throw_if_exception();
+  return ClassLoader{std::move(obj)};
 }
 
 } // namespace lang

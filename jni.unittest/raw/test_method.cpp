@@ -20,7 +20,7 @@ void test_call_method(const char *name, std::initializer_list<T> test_values) {
   jni::raw::method<T(T)> method{mid};
 
   for (const auto &value : test_values) {
-    auto result = method(jni::environment::current(), instance.ref(), value);
+    auto result = method(jni::environment::current(), extract_reference(instance), value);
 
     BOOST_TEST(result == value);
   }
@@ -73,7 +73,8 @@ BOOST_AUTO_TEST_CASE(call_float_method) {
   for (const auto &value :
        {std::numeric_limits<float>::min(), std::numeric_limits<float>::max(),
         0.0f, -1.0f, 1.0f}) {
-    auto result = method(jni::environment::current(), instance.ref(), value);
+    auto result =
+        method(jni::environment::current(), extract_reference(instance), value);
 
     BOOST_CHECK_CLOSE(result, value, 0.0001);
   }
@@ -92,7 +93,8 @@ BOOST_AUTO_TEST_CASE(call_double_method) {
   for (const auto &value :
        {std::numeric_limits<double>::min(), std::numeric_limits<double>::max(),
         0.0, -1.0, 1.0}) {
-    auto result = method(jni::environment::current(), instance.ref(), value);
+    auto result =
+        method(jni::environment::current(), extract_reference(instance), value);
 
     BOOST_CHECK_CLOSE(result, value, 0.0001);
   }

@@ -17,7 +17,7 @@ jni::raw::object_ref_array get_array() {
 
   method<typed_array_ref<string_ref>()> getStringArray{cls, "getStringArray"};
 
-  auto arr = getStringArray(jni::environment::current(), obj.ref());
+  auto arr = getStringArray(jni::environment::current(), extract_reference(obj));
 
   BOOST_TEST((arr != nullptr));
 
@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(set_item_at_index) {
                                                             "testStringArray"};
 
   BOOST_CHECK_NO_THROW(
-      testStringArray(jni::environment::current(), obj.ref(), array.ref()));
+      testStringArray(jni::environment::current(), extract_reference(obj), array.ref()));
 }
 
 BOOST_AUTO_TEST_SUITE_END() // object_ref_array_tests
