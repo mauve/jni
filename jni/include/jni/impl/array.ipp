@@ -130,8 +130,8 @@ template <typename T> bool array<T>::loaded() const {
 }
 
 template <typename T>
-inline raw::object_ref extract_reference(const array<T> &arr) {
-  return reinterpret_cast<raw::object_ref>(arr._ref.raw());
+inline raw::typed_array_ref<T> extract_reference(const array<T> &arr) {
+  return arr._ref.raw();
 }
 
 } // namespace jni

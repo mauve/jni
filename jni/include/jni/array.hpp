@@ -49,7 +49,7 @@ public:
   bool loaded() const;
 
   template <typename T>
-  friend raw::object_ref extract_reference(const array<T>& arr);
+  friend raw::typed_array_ref<T> extract_reference(const array<T>& arr);
 
 private:
   local_ref<raw::typed_array_ref<T>> _ref;
