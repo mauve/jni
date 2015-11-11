@@ -9,7 +9,7 @@
 
 namespace jni {
 
-template <typename T> class array {
+template <typename T> class JNI_EXPORT array {
 public:
   using value_type = T;
   using iterator = T*;
@@ -56,8 +56,13 @@ private:
   std::pair<T*, std::size_t> _elements;
 };
 
-} // namespace jni
+extern template class array<bool>;
+extern template class array<std::uint8_t>;
+extern template class array<std::uint16_t>;
+extern template class array<std::int16_t>;
+extern template class array<std::int32_t>;
+extern template class array<std::int64_t>;
+extern template class array<float>;
+extern template class array<double>;
 
-#define ARRAY_INCLUDING
-# include <jni/impl/array.ipp>
-#undef ARRAY_INCLUDING
+} // namespace jni

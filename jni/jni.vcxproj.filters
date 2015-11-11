@@ -60,6 +60,9 @@
     <ClCompile Include="src\wstring.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\jni\java\lang\class.hpp">

@@ -9,8 +9,10 @@
 
 #ifdef JNI_BUILDING
 #  define JNI_EXPORT __declspec(dllexport)
+#  define JNI_TEMPLATE_EXTERN
 #else
 #  define JNI_EXPORT __declspec(dllimport)
+#  define JNI_TEMPLATE_EXTERN extern
 #endif
 
 #ifndef JNI_WITH_CHECKED_REFS

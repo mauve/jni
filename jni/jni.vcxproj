@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\array.cpp" />
     <ClCompile Include="src\class.cpp" />
     <ClCompile Include="src\classloader.cpp" />
     <ClCompile Include="src\environment.cpp" />
