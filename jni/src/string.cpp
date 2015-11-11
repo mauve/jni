@@ -39,6 +39,7 @@ void string::release() {
   }
 
   environment::current().release_string_elements(_ref.raw(), _buffer);
+  _buffer = std::make_pair(nullptr, 0);
   throw_if_exception();
 }
 
@@ -113,6 +114,7 @@ std::string to_string(raw::string_ref str) {
   throw_if_exception();
   std::string result{buffer.first};
   environment::current().release_string_elements(str, buffer);
+  throw_if_exception();
   return result;
 }
 

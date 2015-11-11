@@ -39,6 +39,7 @@ void wstring::release() {
   }
 
   environment::current().release_string_elements(_ref.raw(), _buffer);
+  _buffer = std::make_pair(nullptr, 0);
   throw_if_exception();
 }
 
