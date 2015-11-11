@@ -204,7 +204,6 @@
     <ClInclude Include="src\internal\ref_converter.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="include\jni\impl\array.ipp" />
     <None Include="include\jni\impl\init.ipp" />
     <None Include="include\jni\impl\raw\field.ipp" />
     <None Include="include\jni\impl\raw\method.ipp" />

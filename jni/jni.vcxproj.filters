@@ -145,7 +145,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="include\jni\impl\array.ipp" />
     <None Include="include\jni\impl\ref.ipp" />
     <None Include="include\jni\impl\raw\signature.ipp" />
     <None Include="include\jni\impl\init.ipp" />
