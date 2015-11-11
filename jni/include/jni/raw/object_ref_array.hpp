@@ -26,7 +26,8 @@ public:
   local_ref<object_ref> get(std::size_t index) const;
   void set(std::size_t index, object_ref ref);
 
-  typed_array_ref<object_ref> ref() const;
+  friend typed_array_ref<object_ref>
+      JNI_EXPORT extract_reference(const object_ref_array &);
 
 private:
   std::size_t _size;

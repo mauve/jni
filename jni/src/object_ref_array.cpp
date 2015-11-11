@@ -40,8 +40,8 @@ void object_ref_array::set(std::size_t index, object_ref ref) {
   environment::current().set_object_array_index(_ref.raw(), index, ref);
 }
 
-typed_array_ref<object_ref> object_ref_array::ref() const {
-  return _ref.raw();
+typed_array_ref<object_ref> extract_reference(const object_ref_array &arr) {
+  return arr._ref.raw();
 }
 
 } // namespace raw
