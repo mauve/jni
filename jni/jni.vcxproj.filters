@@ -57,6 +57,9 @@
     <ClCompile Include="src\object_ref_array.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\wstring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\jni\java\lang\class.hpp">
@@ -134,13 +137,15 @@
     <ClInclude Include="include\jni\raw\extract_reference.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\jni\wstring.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\jni\impl\array.ipp" />
     <None Include="include\jni\impl\ref.ipp" />
     <None Include="include\jni\impl\raw\signature.ipp" />
     <None Include="include\jni\impl\init.ipp" />
-    <None Include="include\jni\impl\string.ipp" />
     <None Include="include\jni\impl\raw\method.ipp" />
     <None Include="include\jni\impl\raw\field.ipp" />
   </ItemGroup>

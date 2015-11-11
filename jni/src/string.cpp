@@ -1,176 +1,118 @@
 
 #include <jni/string.hpp>
-
 #include <jni/environment.hpp>
+#include <jni/detail/throw_if_exception.hpp>
 
 #include <cstring>
 #include <iostream>
 
 namespace jni {
-namespace impl {
 
-local_ref<raw::string_ref> modified_utf8::create(value_type *characters) {
-  return environment::current().new_string(characters);
+string::string(const_pointer characters)
+    : _ref{environment::current().new_string(characters)}, _buffer{nullptr, 0} {
+  throw_if_exception();
 }
 
-std::pair<modified_utf8::value_type *, std::size_t>
-modified_utf8::load(raw::string_ref ref) {
-  if (!ref) {
-    return {nullptr, 0};
+string::string(local_ref<raw::string_ref> &&ref)
+    : _ref{std::move(ref)}, _buffer{nullptr, 0} {}
+
+string::string(global_ref<raw::string_ref> &&ref)
+    : _ref{std::move(ref)}, _buffer{nullptr, 0} {}
+
+string::~string() { release(); }
+
+bool string::loaded() const { return _buffer.first != 0; }
+
+void string::load() {
+  if (loaded()) {
+    return;
   }
 
-  return environment::current().load_utf8_characters(ref);
+  auto buffer = environment::current().load_utf8_characters(_ref.raw());
+  throw_if_exception();
+  _buffer = buffer;
 }
 
-void modified_utf8::release(
-    raw::string_ref ref, const std::pair<value_type *, std::size_t> &buffer) {
-  if (!ref || !buffer.first)
+void string::release() {
+  if (!loaded()) {
     return;
-
-  return environment::current().release_string_elements(ref, buffer);
-}
-
-local_ref<raw::string_ref> modified_utf16::create(value_type *characters) {
-  return environment::current().new_string(characters);
-}
-
-std::pair<modified_utf16::value_type *, std::size_t>
-modified_utf16::load(raw::string_ref ref) {
-  if (!ref) {
-    return {nullptr, 0};
   }
 
-  return environment::current().load_utf16_characters(ref);
+  environment::current().release_string_elements(_ref.raw(), _buffer);
+  throw_if_exception();
 }
 
-void modified_utf16::release(
-    raw::string_ref ref, const std::pair<value_type *, std::size_t> &buffer) {
-  if (!ref || !buffer.first)
-    return;
+bool string::empty() const { return length() == 0; }
 
-  return environment::current().release_string_elements(ref, buffer);
+string::const_iterator string::c_str() const {
+  return data();
 }
 
-} // namespace impl
+string::const_pointer string::data() const {
+  const_cast<string *>(this)->load();
+  return _buffer.first;
+}
 
-bool operator==(const basic_string<impl::modified_utf8> &left,
-                const basic_string<impl::modified_utf8> &right) {
+std::size_t string::length() const {
+  const_cast<string *>(this)->load();
+  return _buffer.second;
+}
+
+string::const_iterator string::begin() const { return data(); }
+
+string::const_iterator string::end() const { return data() + length(); }
+
+string::const_iterator string::cbegin() const { return data(); }
+
+string::const_iterator string::cend() const { return data() + length(); }
+
+bool operator==(const string &left, const string &right) {
   return std::strcmp(left.c_str(), right.c_str()) == 0;
 }
 
-bool operator!=(const basic_string<impl::modified_utf8> &left,
-                const basic_string<impl::modified_utf8> &right) {
+bool operator!=(const string &left, const string &right) {
   return std::strcmp(left.c_str(), right.c_str()) != 0;
 }
 
-bool operator==(const basic_string<impl::modified_utf16> &left,
-                const basic_string<impl::modified_utf16> &right) {
-  return std::wcscmp(left.c_str(), right.c_str()) == 0;
-}
-
-bool operator!=(const basic_string<impl::modified_utf16> &left,
-                const basic_string<impl::modified_utf16> &right) {
-  return std::wcscmp(left.c_str(), right.c_str()) != 0;
-}
-
-bool operator==(const basic_string<impl::modified_utf8> &left,
-                const char *right) {
+bool operator==(const string &left, const char *right) {
   return std::strcmp(left.c_str(), right) == 0;
 }
 
-bool operator==(const char *left,
-                const basic_string<impl::modified_utf8> &right) {
+bool operator==(const char *left, const string &right) {
   return std::strcmp(left, right.c_str()) == 0;
 }
 
-bool operator!=(const basic_string<impl::modified_utf8> &left,
-                const char *right) {
+bool operator!=(const string &left, const char *right) {
   return std::strcmp(left.c_str(), right) != 0;
 }
 
-bool operator!=(const char *left,
-                const basic_string<impl::modified_utf8> &right) {
+bool operator!=(const char *left, const string &right) {
   return std::strcmp(left, right.c_str()) != 0;
 }
 
-bool operator==(const basic_string<impl::modified_utf16> &left,
-                const wchar_t *right) {
-  return std::wcscmp(left.c_str(), right) == 0;
-}
-bool operator==(const wchar_t *left,
-                const basic_string<impl::modified_utf16> &right) {
-  return std::wcscmp(left, right.c_str()) == 0;
-}
-
-bool operator!=(const basic_string<impl::modified_utf16> &left,
-                const wchar_t *right) {
-  return std::wcscmp(left.c_str(), right) != 0;
-}
-
-bool operator!=(const wchar_t *left,
-                const basic_string<impl::modified_utf16> &right) {
-  return std::wcscmp(left, right.c_str()) != 0;
-}
-
-bool operator==(const basic_string<impl::modified_utf8> &left,
-                const std::string &right) {
+bool operator==(const string &left, const std::string &right) {
   return left == right.c_str();
 }
 
-bool operator==(const std::string &left,
-                const basic_string<impl::modified_utf8> &right) {
+bool operator==(const std::string &left, const string &right) {
   return left.c_str() == right;
 }
 
-bool operator!=(const basic_string<impl::modified_utf8> &left,
-                const std::string &right) {
+bool operator!=(const string &left, const std::string &right) {
   return left != right.c_str();
 }
 
-bool operator!=(const std::string &left,
-                const basic_string<impl::modified_utf8> &right) {
+bool operator!=(const std::string &left, const string &right) {
   return left.c_str() != right;
 }
 
-bool operator==(const basic_string<impl::modified_utf16> &left,
-                const std::wstring &right) {
-  return left == right.c_str();
-}
-
-bool operator==(const std::wstring &left,
-                const basic_string<impl::modified_utf16> &right) {
-  return left.c_str() == right;
-}
-
-bool operator!=(const basic_string<impl::modified_utf16> &left,
-                const std::wstring &right) {
-  return left != right.c_str();
-}
-
-bool operator!=(const std::wstring &left,
-                const basic_string<impl::modified_utf16> &right) {
-  return left.c_str() != right;
-}
-
-std::string to_string(const basic_string<impl::modified_utf8> &str) {
-  return str.c_str();
-}
-
-std::wstring to_wstring(const basic_string<impl::modified_utf16> &str) {
-  return str.c_str();
-}
+std::string to_string(const string &str) { return str.c_str(); }
 
 std::string to_string(raw::string_ref str) {
-  auto buffer = impl::modified_utf8::load(str);
-  if (!buffer.first) {
-    // TODO: throw exception
-    return "";
-  }
-
+  auto buffer = environment::current().load_utf8_characters(str);
+  throw_if_exception();
   std::string result{buffer.first};
-
-  impl::modified_utf8::release(str, buffer);
-
+  environment::current().release_string_elements(str, buffer);
   return result;
 }
 
@@ -178,50 +120,10 @@ std::string to_string(local_ref<raw::string_ref> ref) {
   return to_string(ref.raw());
 }
 
-std::wstring to_wstring(raw::string_ref str) {
-  auto buffer = impl::modified_utf16::load(str);
-  if (!buffer.first) {
-    // TODO: throw exception
-    return L"";
-  }
-
-  std::wstring result{buffer.first};
-
-  impl::modified_utf16::release(str, buffer);
-
-  return result;
-}
-
-std::wstring to_wstring(local_ref<raw::string_ref> ref) {
-  return to_wstring(ref.raw());
-}
-
-std::ostream &operator<<(std::ostream &os,
-                         const basic_string<impl::modified_utf8> &str) {
+std::ostream &operator<<(std::ostream &os, const string &str) {
   return os << str.c_str();
 }
 
-std::ostream &operator<<(std::ostream &os,
-                         const basic_string<impl::modified_utf16> &str) {
-  return os << str.c_str();
-}
-
-std::wostream &operator<<(std::wostream &os,
-                          const basic_string<impl::modified_utf16> &str) {
-  return os << str.c_str();
-}
-
-std::wostream &operator<<(std::wostream &os,
-                          const basic_string<impl::modified_utf8> &str) {
-  return os << str.c_str();
-}
-
-raw::string_ref extract_reference(const basic_string<impl::modified_utf8> &str) {
-  return str._ref.raw();
-}
-
-raw::string_ref extract_reference(const basic_string<impl::modified_utf16> &str) {
-  return str._ref.raw();
-}
+raw::string_ref extract_reference(const string &str) { return str._ref.raw(); }
 
 } // namespace jni

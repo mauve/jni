@@ -172,6 +172,7 @@
     <ClCompile Include="src\types.cpp" />
     <ClCompile Include="src\value.cpp" />
     <ClCompile Include="src\vm.cpp" />
+    <ClCompile Include="src\wstring.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\jni\api_version.hpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="include\jni\raw\signature.hpp" />
     <ClInclude Include="include\jni\string.hpp" />
     <ClInclude Include="include\jni\vm.hpp" />
+    <ClInclude Include="include\jni\wstring.hpp" />
     <ClInclude Include="src\internal\ref_converter.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -207,7 +209,6 @@
     <None Include="include\jni\impl\raw\method.ipp" />
     <None Include="include\jni\impl\ref.ipp" />
     <None Include="include\jni\impl\raw\signature.ipp" />
-    <None Include="include\jni\impl\string.ipp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

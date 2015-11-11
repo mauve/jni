@@ -2,14 +2,16 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/mpl/list.hpp>
 
+#include <jni/environment.hpp>
 #include <jni/string.hpp>
+#include <jni/wstring.hpp>
 
 #include <string>
 #include <sstream>
 
 template <typename T> struct test_data;
 
-template <> struct test_data<jni::modified_utf8_string> {
+template <> struct test_data<jni::string> {
   using std_string_type = std::string;
   using std_stream_type = std::stringstream;
 
@@ -19,7 +21,7 @@ template <> struct test_data<jni::modified_utf8_string> {
   static const char *empty() { return ""; }
 };
 
-template <> struct test_data<jni::modified_utf16_string> {
+template <> struct test_data<jni::wstring> {
   using std_string_type = std::wstring;
   using std_stream_type = std::wstringstream;
 
@@ -29,8 +31,7 @@ template <> struct test_data<jni::modified_utf16_string> {
   static const wchar_t *empty() { return L""; }
 };
 
-using jni_strings =
-    boost::mpl::list<jni::modified_utf8_string, jni::modified_utf16_string>;
+using jni_strings = boost::mpl::list<jni::string, jni::wstring>;
 
 BOOST_AUTO_TEST_SUITE(string_tests)
 
@@ -126,7 +127,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(output, T, jni_strings) {
 }
 
 BOOST_AUTO_TEST_CASE(to_string) {
-  jni::modified_utf8_string string{"constant1"};
+  jni::string string{"constant1"};
 
   using jni::to_string;
 
@@ -135,7 +136,7 @@ BOOST_AUTO_TEST_CASE(to_string) {
 }
 
 BOOST_AUTO_TEST_CASE(to_wstring) {
-  jni::modified_utf16_string string{L"constant1"};
+  jni::wstring string{L"constant1"};
 
   using jni::to_wstring;
 

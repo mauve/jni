@@ -51,7 +51,7 @@ ClassLoader::~ClassLoader() = default;
 Class ClassLoader::defineClass(const std::string &name,
                                const std::uint8_t *begin,
                                const std::uint8_t *end) {
-  modified_utf8_string jname{name.c_str()};
+  string jname{name.c_str()};
 
   std::size_t buffer_size = end - begin;
   array<std::uint8_t> buffer{buffer_size};
@@ -66,7 +66,7 @@ Class ClassLoader::defineClass(const std::string &name,
 }
 
 Class ClassLoader::loadClass(const std::string &name) {
-  modified_utf8_string jname{name.c_str()};
+  string jname{name.c_str()};
   return Class{method_cache::get().loadClass(environment::current(),
                                              extract_reference(*this),
                                              extract_reference(jname))};
