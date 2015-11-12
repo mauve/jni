@@ -2,7 +2,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include <jni/raw/signature.hpp>
-#include <jni/ref.hpp>
+#include <jni/global_ref.hpp>
+#include <jni/local_ref.hpp>
 
 #include <string>
 

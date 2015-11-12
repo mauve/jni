@@ -47,7 +47,7 @@ template<> inline static local_ref<ref_type>                                   \
                                         method_id mid, const value *pack) {    \
     auto result = env.call_object_method(instance, mid, pack);                 \
     throw_if_exception();                                                      \
-    return result.cast<ref_type>();                                            \
+    return ref_cast<ref_type>(std::move(result));                              \
   \
 }
 

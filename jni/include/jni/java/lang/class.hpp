@@ -4,7 +4,8 @@
 #include <jni/config.hpp>
 #include <jni/raw/signature.hpp>
 #include <jni/raw/types.hpp>
-#include <jni/ref.hpp>
+#include <jni/global_ref.hpp>
+#include <jni/local_ref.hpp>
 
 #include <jni/java/lang/object.hpp>
 

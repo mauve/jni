@@ -4,7 +4,8 @@
 #include <jni/config.hpp>
 #include <jni/java/lang/object.hpp>
 
-#include <jni/ref.hpp>
+#include <jni/global_ref.hpp>
+#include <jni/local_ref.hpp>
 
 #include <stdexcept>
 #include <string>
@@ -17,7 +18,7 @@ namespace lang {
 class JNI_EXPORT Throwable final : public Object, public std::runtime_error {
 public:
   explicit Throwable(local_ref<raw::throwable_ref> &&ref);
-  explicit Throwable(global_ref<raw::throwable_ref> &ref);
+  explicit Throwable(global_ref<raw::throwable_ref> &&ref);
 
   Throwable(const Throwable &other);
   Throwable(Throwable &&other);

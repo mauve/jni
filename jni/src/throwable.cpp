@@ -7,7 +7,8 @@
 #include <jni/java/lang/class.hpp>
 
 #include <jni/string.hpp>
-#include <jni/ref.hpp>
+#include <jni/global_ref.hpp>
+#include <jni/local_ref.hpp>
 #include <jni/raw/method.hpp>
 #include <jni/raw/value.hpp>
 
@@ -50,12 +51,12 @@ struct method_cache {
 } // namespace anonymous
 
 Throwable::Throwable(local_ref<raw::throwable_ref> &&ref)
-    : Object{ref.cast<raw::object_ref>()}, runtime_error{"Throwable"} {
+    : Object{ref_cast<raw::object_ref>(std::move(ref))}, runtime_error{"Throwable"} {
   _serialized_message = getMessage();
 }
 
-Throwable::Throwable(global_ref<raw::throwable_ref> &ref)
-    : Object{ref.cast<raw::object_ref>()}, runtime_error{"Throwable"} {
+Throwable::Throwable(global_ref<raw::throwable_ref> &&ref)
+    : Object{ref_cast<raw::object_ref>(std::move(ref))}, runtime_error{"Throwable"} {
   _serialized_message = getMessage();
 }
 

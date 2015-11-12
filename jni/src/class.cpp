@@ -56,9 +56,9 @@ struct method_cache {
 } // namespace anonymous
 
 Class::Class(local_ref<raw::class_ref> &&cls)
-    : Object(cls.cast<raw::object_ref>()) {}
+    : Object(ref_cast<raw::object_ref>(std::move(cls))) {}
 Class::Class(global_ref<raw::class_ref> &&cls)
-    : Object(cls.cast<raw::object_ref>()) {}
+    : Object(ref_cast<raw::object_ref>(std::move(cls))) {}
 Class::Class(const Class &other) = default;
 Class::Class(Class &&other) = default;
 Class::~Class() = default;

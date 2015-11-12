@@ -6,7 +6,7 @@
 #include <jni/api_version.hpp>
 #include <jni/raw/types.hpp>
 #include <jni/raw/value.hpp>
-#include <jni/ref.hpp>
+#include <jni/local_ref.hpp>
 
 namespace jni {
 

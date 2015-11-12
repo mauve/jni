@@ -63,6 +63,12 @@
     <ClCompile Include="src\array.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\local_ref.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\global_ref.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\jni\java\lang\class.hpp">
@@ -72,9 +78,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\jni\environment.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\jni\ref.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\jni\array.hpp">
@@ -143,9 +146,14 @@
     <ClInclude Include="include\jni\wstring.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\jni\local_ref.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\global_ref.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="include\jni\impl\ref.ipp" />
     <None Include="include\jni\impl\raw\signature.ipp" />
     <None Include="include\jni\impl\init.ipp" />
     <None Include="include\jni\impl\raw\method.ipp" />

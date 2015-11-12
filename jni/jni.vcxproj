@@ -90,6 +90,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);JNI_BUILDING</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\jni\include;$(SolutionDir)\jni\src;C:\Users\Mikael\Downloads\boost_1_59_0;C:\Users\Mikael\.vulcan\cache\jdk1.8.0_60-win32.zip-ef26bd8bc0fd88a0b7ebe8eb8f7328aa8d9bf9c4\extracted\jdk\include;C:\Users\Mikael\.vulcan\cache\jdk1.8.0_60-win32.zip-ef26bd8bc0fd88a0b7ebe8eb8f7328aa8d9bf9c4\extracted\jdk\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4910;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -107,6 +108,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);JNI_BUILDING</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\jni\include;$(SolutionDir)\jni\src;C:\Users\Mikael\Downloads\boost_1_59_0;C:\Users\Mikael\.vulcan\cache\jdk1.8.0_60-win32.zip-ef26bd8bc0fd88a0b7ebe8eb8f7328aa8d9bf9c4\extracted\jdk\include;C:\Users\Mikael\.vulcan\cache\jdk1.8.0_60-win32.zip-ef26bd8bc0fd88a0b7ebe8eb8f7328aa8d9bf9c4\extracted\jdk\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4910;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,9 +125,10 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);JNI_BUILDING;JNI_WITH_CHECKED_REFS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);JNI_BUILDING</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\jni\include;$(SolutionDir)\jni\src;C:\Users\Mikael\Downloads\boost_1_59_0;C:\Users\Mikael\.vulcan\cache\jdk1.8.0_60-win32.zip-ef26bd8bc0fd88a0b7ebe8eb8f7328aa8d9bf9c4\extracted\jdk\include;C:\Users\Mikael\.vulcan\cache\jdk1.8.0_60-win32.zip-ef26bd8bc0fd88a0b7ebe8eb8f7328aa8d9bf9c4\extracted\jdk\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4910;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,6 +150,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);JNI_BUILDING;JNI_WITH_CHECKED_REFS</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\jni\include;$(SolutionDir)\jni\src;C:\Users\Mikael\Downloads\boost_1_59_0;C:\Users\Mikael\.vulcan\cache\jdk1.8.0_60-win32.zip-ef26bd8bc0fd88a0b7ebe8eb8f7328aa8d9bf9c4\extracted\jdk\include;C:\Users\Mikael\.vulcan\cache\jdk1.8.0_60-win32.zip-ef26bd8bc0fd88a0b7ebe8eb8f7328aa8d9bf9c4\extracted\jdk\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4910;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,8 +167,10 @@
     <ClCompile Include="src\classloader.cpp" />
     <ClCompile Include="src\environment.cpp" />
     <ClCompile Include="src\errors.cpp" />
+    <ClCompile Include="src\global_ref.cpp" />
     <ClCompile Include="src\init.cpp" />
     <ClCompile Include="src\internal\ref_converter.cpp" />
+    <ClCompile Include="src\local_ref.cpp" />
     <ClCompile Include="src\object.cpp" />
     <ClCompile Include="src\object_ref_array.cpp" />
     <ClCompile Include="src\string.cpp" />
@@ -183,10 +189,12 @@
     <ClInclude Include="include\jni\detail\remove_ref.hpp" />
     <ClInclude Include="include\jni\detail\throw_if_exception.hpp" />
     <ClInclude Include="include\jni\errors.hpp" />
+    <ClInclude Include="include\jni\global_ref.hpp" />
     <ClInclude Include="include\jni\init.hpp" />
     <ClInclude Include="include\jni\java\lang\classloader.hpp" />
     <ClInclude Include="include\jni\java\lang\throwable.hpp" />
     <ClInclude Include="include\jni\jni.hpp" />
+    <ClInclude Include="include\jni\local_ref.hpp" />
     <ClInclude Include="include\jni\raw\extract_reference.hpp" />
     <ClInclude Include="include\jni\raw\object_ref_array.hpp" />
     <ClInclude Include="include\jni\raw\field.hpp" />
@@ -196,7 +204,6 @@
     <ClInclude Include="include\jni\raw\method.hpp" />
     <ClInclude Include="include\jni\raw\types.hpp" />
     <ClInclude Include="include\jni\raw\value.hpp" />
-    <ClInclude Include="include\jni\ref.hpp" />
     <ClInclude Include="include\jni\raw\signature.hpp" />
     <ClInclude Include="include\jni\string.hpp" />
     <ClInclude Include="include\jni\vm.hpp" />
@@ -207,7 +214,6 @@
     <None Include="include\jni\impl\init.ipp" />
     <None Include="include\jni\impl\raw\field.ipp" />
     <None Include="include\jni\impl\raw\method.ipp" />
-    <None Include="include\jni\impl\ref.ipp" />
     <None Include="include\jni\impl\raw\signature.ipp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

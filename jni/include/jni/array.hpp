@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <jni/ref.hpp>
+#include <jni/local_ref.hpp>
 #include <jni/raw/types.hpp>
 
 #include <cstddef>

@@ -8,22 +8,26 @@
 #include <sstream>
 #include <string>
 
+using jni::ref_cast;
+using jni::environment;
+using jni::java::lang::Object;
+using jni::local_ref;
+using jni::raw::object_ref;
+
 BOOST_AUTO_TEST_SUITE(java_tests)
 BOOST_AUTO_TEST_SUITE(lang_tests)
 BOOST_AUTO_TEST_SUITE(object_tests)
 
 BOOST_AUTO_TEST_CASE(create) {
-  jni::local_ref<jni::raw::object_ref> ref{
-      jni::environment::current().new_string("just a string")};
-  jni::java::lang::Object obj{ref};
+  Object obj{
+      ref_cast<object_ref>(environment::current().new_string("just a string"))};
 
   BOOST_TEST(obj.hashCode() != 0);
 }
 
 BOOST_AUTO_TEST_CASE(toString) {
-  jni::local_ref<jni::raw::object_ref> ref{
-      jni::environment::current().new_string("just a string")};
-  jni::java::lang::Object obj{ref};
+  Object obj{
+      ref_cast<object_ref>(environment::current().new_string("just a string"))};
 
   auto result = obj.toString();
 
@@ -31,9 +35,8 @@ BOOST_AUTO_TEST_CASE(toString) {
 }
 
 BOOST_AUTO_TEST_CASE(stream) {
-  jni::local_ref<jni::raw::object_ref> ref{
-      jni::environment::current().new_string("just a string")};
-  jni::java::lang::Object obj{ref};
+  Object obj{ref_cast<object_ref>(
+      jni::environment::current().new_string("just a string"))};
 
   std::ostringstream os;
   os << obj;
@@ -44,17 +47,12 @@ BOOST_AUTO_TEST_CASE(stream) {
 }
 
 BOOST_AUTO_TEST_CASE(equals) {
-  jni::local_ref<jni::raw::object_ref> ref1{
-      jni::environment::current().new_string("just a string")};
-  jni::java::lang::Object obj1{ref1};
-
-  jni::local_ref<jni::raw::object_ref> ref2{
-      jni::environment::current().new_string("just a string")};
-  jni::java::lang::Object obj2{ref2};
-
-  jni::local_ref<jni::raw::object_ref> ref3{
-      jni::environment::current().new_string("a different string")};
-  jni::java::lang::Object obj3{ref3};
+  Object obj1{
+      ref_cast<object_ref>(environment::current().new_string("just a string"))};
+  Object obj2{
+      ref_cast<object_ref>(environment::current().new_string("just a string"))};
+  Object obj3{ref_cast<object_ref>(
+      environment::current().new_string("a different string"))};
 
   BOOST_TEST(obj1.equals(obj2));
   BOOST_TEST(obj2.equals(obj1));

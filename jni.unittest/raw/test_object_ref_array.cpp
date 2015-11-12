@@ -22,7 +22,8 @@ jni::raw::object_ref_array get_array() {
 
   BOOST_TEST((arr != nullptr));
 
-  return jni::raw::object_ref_array{std::move(arr)};
+  return jni::raw::object_ref_array{
+      jni::ref_cast<typed_array_ref<jni::raw::object_ref>>(std::move(arr))};
 }
 
 BOOST_AUTO_TEST_SUITE(raw_tests)
