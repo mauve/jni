@@ -20,6 +20,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(create_from_size, T, jni_pod_types) {
   BOOST_TEST(array.size() == 10);
 }
 
+BOOST_AUTO_TEST_CASE_TEMPLATE(create_from_buffer, T, jni_pod_types) {
+  T buffer[10] = {T(0)};
+
+  jni::array<T> array{buffer, buffer + 10};
+  BOOST_TEST(array.size() == 10);
+  // TODO: compare values
+}
+
 BOOST_AUTO_TEST_CASE_TEMPLATE(create_and_move, T, jni_pod_types) {
   jni::array<T> original{10};
 

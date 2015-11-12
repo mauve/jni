@@ -53,16 +53,12 @@ Class ClassLoader::defineClass(const std::string &name,
                                const std::uint8_t *end) {
   string jname{name.c_str()};
 
-  std::size_t buffer_size = end - begin;
-  array<std::uint8_t> buffer{buffer_size};
-  buffer.load();
-  std::memcpy(buffer.data(), begin, buffer_size);
-  buffer.commit();
+  array<std::uint8_t> buffer{begin, end};
 
   return Class{method_cache::get().defineClass(
       environment::current(), extract_reference(*this),
       extract_reference(jname), extract_reference(buffer), (std::int32_t)0,
-      (std::int32_t)buffer_size)};
+      (std::int32_t)buffer.size())};
 }
 
 Class ClassLoader::loadClass(const std::string &name) {

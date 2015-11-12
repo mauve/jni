@@ -4,6 +4,8 @@
 #include <jni/config.hpp>
 #include <jni/environment.hpp>
 
+#include <cstring>
+
 namespace jni {
 
 template <typename T>
@@ -11,6 +13,16 @@ inline array<T>::array(std::size_t size)
     : _ref(environment::current().new_array(size,
                                             reinterpret_cast<T *>(nullptr))),
       _elements(nullptr, environment::current().get_array_size(_ref.raw())) {}
+
+template <typename T>
+inline array<T>::array(const_iterator begin, const_iterator end)
+  : _ref(environment::current().new_array(end - begin,
+    reinterpret_cast<T *>(nullptr))),
+  _elements(nullptr, environment::current().get_array_size(_ref.raw())) {
+  load();
+  std::memcpy(data(), begin, end - begin);
+  commit();
+}
 
 template <typename T>
 inline array<T>::array(local_ref<raw::typed_array_ref<T>> &&ref)

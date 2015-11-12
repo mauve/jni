@@ -16,6 +16,7 @@ public:
   using const_iterator = const T*;
 
   explicit array(std::size_t size);
+  explicit array(const_iterator begin, const_iterator end);
   explicit array(local_ref<raw::typed_array_ref<T>> &&ref);
   array(array &&other);
   ~array();
