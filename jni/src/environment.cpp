@@ -37,13 +37,8 @@ public:
   raw::object_ref new_local_ref(raw::object_ref obj) override {
     if (obj == nullptr)
       return nullptr;
-#if JNI_WITH(CHECKED_REFS)
-    return internal::from_jni(_env->NewLocalRef(internal::to_jni(obj)),
-                              obj->type(), "new_local_ref");
-#else  // JNI_WITH(CHECKED_REFS)
     return internal::from_jni(_env->NewLocalRef(internal::to_jni(obj)),
                               "new_local_ref");
-#endif // JNI_WITH(CHECKED_REFS)
   }
 
   void delete_local_ref(raw::object_ref obj) override {
@@ -55,13 +50,8 @@ public:
   raw::object_ref new_global_ref(raw::object_ref obj) override {
     if (obj == nullptr)
       return nullptr;
-#if JNI_WITH(CHECKED_REFS)
-    return internal::from_jni(_env->NewGlobalRef(internal::to_jni(obj)),
-                              obj->type(), "new_global_ref");
-#else  // JNI_WITH(CHECKED_REFS)
     return internal::from_jni(_env->NewGlobalRef(internal::to_jni(obj)),
                               "new_global_ref");
-#endif // JNI_WITH(CHECKED_REFS)
   }
 
   void delete_global_ref(raw::object_ref obj) override {

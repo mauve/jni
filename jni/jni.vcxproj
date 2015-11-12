@@ -169,7 +169,6 @@
     <ClCompile Include="src\errors.cpp" />
     <ClCompile Include="src\global_ref.cpp" />
     <ClCompile Include="src\init.cpp" />
-    <ClCompile Include="src\internal\ref_converter.cpp" />
     <ClCompile Include="src\local_ref.cpp" />
     <ClCompile Include="src\object.cpp" />
     <ClCompile Include="src\object_ref_array.cpp" />

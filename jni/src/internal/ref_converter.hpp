@@ -8,45 +8,6 @@
 namespace jni {
 namespace internal {
 
-#if JNI_WITH(CHECKED_REFS)
-
-raw::object_ref from_jni(jobject jobj, raw::ref_type type, const char *source);
-raw::object_ref from_jni(jobject jobj, const char *source);
-raw::class_ref from_jni(jclass jcls, const char *source);
-raw::throwable_ref from_jni(jthrowable jthr, const char *source);
-raw::string_ref from_jni(jstring jstr, const char *source);
-raw::array_ref from_jni(jarray jarr, const char *source);
-raw::typed_array_ref<raw::object_ref> from_jni(jobjectArray, const char *source);
-raw::typed_array_ref<bool> from_jni(jbooleanArray, const char *source);
-raw::typed_array_ref<std::uint8_t> from_jni(jbyteArray, const char *source);
-raw::typed_array_ref<std::uint16_t> from_jni(jcharArray, const char *source);
-raw::typed_array_ref<std::int16_t> from_jni(jshortArray, const char *source);
-raw::typed_array_ref<std::int32_t> from_jni(jintArray, const char *source);
-raw::typed_array_ref<std::int64_t> from_jni(jlongArray, const char *source);
-raw::typed_array_ref<float> from_jni(jfloatArray, const char *source);
-raw::typed_array_ref<double> from_jni(jdoubleArray, const char *source);
-raw::method_id from_jni(jmethodID mid, const char *source);
-raw::field_id from_jni(jfieldID fid, const char *source);
-
-jobject to_jni(raw::object_ref ref);
-jclass to_jni(raw::class_ref ref);
-jthrowable to_jni(raw::throwable_ref ref);
-jarray to_jni(raw::array_ref ref);
-jobjectArray to_jni(raw::typed_array_ref<raw::object_ref> ref);
-jbooleanArray to_jni(raw::typed_array_ref<bool> ref);
-jbyteArray to_jni(raw::typed_array_ref<std::uint8_t> ref);
-jcharArray to_jni(raw::typed_array_ref<std::uint16_t> ref);
-jshortArray to_jni(raw::typed_array_ref<std::int16_t> ref);
-jintArray to_jni(raw::typed_array_ref<std::int32_t> ref);
-jlongArray to_jni(raw::typed_array_ref<std::int64_t> ref);
-jfloatArray to_jni(raw::typed_array_ref<float> ref);
-jdoubleArray to_jni(raw::typed_array_ref<double> ref);
-jstring to_jni(raw::string_ref ref);
-jmethodID to_jni(raw::method_id mid);
-jfieldID to_jni(raw::field_id fid);
-
-#else // !JNI_WITH(CHECKED_REFS)
-
 inline raw::object_ref from_jni(jobject jobj, raw::ref_type type, const char *source) {
   return reinterpret_cast<raw::object_ref>(jobj);
 }
@@ -178,8 +139,6 @@ inline jmethodID to_jni(raw::method_id mid) {
 inline jfieldID to_jni(raw::field_id fid) {
   return reinterpret_cast<jfieldID>(fid);
 }
-
-#endif  // !JNI_WITH(CHECKED_REFS)
 
 } // namespace internal
 } // namespace jni

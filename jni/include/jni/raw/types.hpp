@@ -23,74 +23,13 @@ enum ref_type {
 
 namespace detail {
 
-struct _jni_object {
-#if JNI_WITH(CHECKED_REFS)
-  _jni_object() = delete;
-  _jni_object(const _jni_object &) = delete;
-  _jni_object(_jni_object &&) = delete;
+struct _jni_object {};
+struct _jni_class : public _jni_object {};
+struct _jni_throwable : public _jni_object {};
+struct _jni_string : public _jni_object {};
+struct _jni_array : public _jni_object {};
 
-  _jni_object &operator= (const _jni_object &) = delete;
-  _jni_object &operator= (_jni_object &&) = delete;
-
-  _jni_object(void *jni_ref, const char *source);
-  virtual ~_jni_object();
-
-  virtual ref_type type() const;
-  virtual const char *source() const;
-
-  virtual void add_local_ref();
-  virtual void del_local_ref();
-  virtual int local_refs() const;
-
-  virtual void add_global_ref();
-  virtual void del_global_ref();
-  virtual int global_refs() const;
-
-  virtual void *get_ref() const;
-
-private:
-  int _local_refs;
-  int _global_refs;
-  void *_ref;
-  const char *_source;
-#endif
-};
-
-struct _jni_class : public _jni_object {
-#if JNI_WITH(CHECKED_REFS)
-  explicit _jni_class(void *jni_ref, const char *source);
-
-  ref_type type() const override;
-#endif
-};
-
-struct _jni_throwable : public _jni_object {
-#if JNI_WITH(CHECKED_REFS)
-  explicit _jni_throwable(void *jni_ref, const char *source);
-
-  ref_type type() const override;
-#endif
-};
-
-struct _jni_string : public _jni_object {
-#if JNI_WITH(CHECKED_REFS)
-  explicit _jni_string(void *jni_ref, const char *source);
-
-  ref_type type() const override;
-#endif
-};
-
-struct _jni_array : public _jni_object {
-#if JNI_WITH(CHECKED_REFS)
-  explicit _jni_array(void *jni_ref, const char *source);
-
-  ref_type type() const override;
-#endif
-};
-
-template <typename T> class _jni_typed_array : public _jni_array {
-  using _jni_array::_jni_array;
-};
+template <typename T> class _jni_typed_array : public _jni_array {};
 
 class _jni_method_id {};
 class _jni_field_id {};

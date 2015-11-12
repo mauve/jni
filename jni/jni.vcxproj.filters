@@ -42,9 +42,6 @@
     <ClCompile Include="src\string.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\internal\ref_converter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\classloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
