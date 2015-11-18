@@ -78,6 +78,13 @@ raw::method_id Class::getMethod(const char *name, const char *signature) {
   return result;
 }
 
+raw::method_id Class::getStaticMethod(const char *name, const char *signature) {
+  auto result = environment::current().get_static_method_id(
+      extract_reference(*this), name, signature);
+  throw_if_exception();
+  return result;
+}
+
 ClassLoader Class::getClassLoader() const {
   return ClassLoader{method_cache::get().getClassLoader(*this)};
 }
@@ -102,8 +109,8 @@ bool Class::isAnnotation() const {
 // Returns true if an annotation for the specified type is present on this
 // element, else false.
 bool Class::isAnnotationPresent(const Class &annotationClass) {
-  return method_cache::get().isAnnotationPresent(*this,
-      extract_reference(annotationClass));
+  return method_cache::get().isAnnotationPresent(
+      *this, extract_reference(annotationClass));
 }
 
 // Returns true if and only if the underlying class is an anonymous class.
@@ -112,9 +119,7 @@ bool Class::isAnonymousClass() const {
 }
 
 // Determines if this Class object represents an array class.
-bool Class::isArray() const {
-  return method_cache::get().isArray(*this);
-}
+bool Class::isArray() const { return method_cache::get().isArray(*this); }
 
 // Determines if the class or interface represented by this Class object is
 // either the same as, or is a superclass or superinterface of, the class or
@@ -125,9 +130,7 @@ bool Class::isAssignableFrom(const Class &cls) const {
 
 // Returns true if and only if this class was declared as an enum in the source
 // code.
-bool Class::isEnum() const {
-  return method_cache::get().isEnum(*this);
-}
+bool Class::isEnum() const { return method_cache::get().isEnum(*this); }
 
 // Determines if the specified Object is assignment - compatible with the object
 // represented by this Class.

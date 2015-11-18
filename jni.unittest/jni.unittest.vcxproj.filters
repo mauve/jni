@@ -51,6 +51,9 @@
     <ClCompile Include="test_classname.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="raw\test_static_method.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="classes\MethodTest.java" />

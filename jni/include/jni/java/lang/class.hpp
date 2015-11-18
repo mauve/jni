@@ -34,6 +34,10 @@ public:
 
   template <typename Function> raw::method_id getMethod(const char *name);
 
+  raw::method_id getStaticMethod(const char *name, const char *signature);
+
+  template <typename Function> raw::method_id getStaticMethod(const char *name);
+
   // Returns the class loader for the class.
   ClassLoader getClassLoader() const;
 
@@ -99,7 +103,14 @@ inline raw::method_id Class::getMethod(const char *name) {
   return this->getMethod(name, signature.get());
 }
 
-raw::class_ref extract_reference(const Class &cls);
+template <typename Function>
+inline raw::method_id Class::getStaticMethod(const char *name) {
+  raw::signature<Function> signature;
+
+  return this->getStaticMethod(name, signature.get());
+}
+
+JNI_EXPORT raw::class_ref extract_reference(const Class &cls);
 
 } // namespace lang
 } // namespace java

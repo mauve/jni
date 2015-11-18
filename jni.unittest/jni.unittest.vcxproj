@@ -158,6 +158,7 @@
     <ClCompile Include="java\lang\test_classloader.cpp" />
     <ClCompile Include="raw\test_method.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="raw\test_static_method.cpp" />
     <ClCompile Include="test_array.cpp" />
     <ClCompile Include="java\lang\test_object.cpp" />
     <ClCompile Include="raw\test_object_ref_array.cpp" />

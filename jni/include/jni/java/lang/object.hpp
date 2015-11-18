@@ -45,6 +45,9 @@ public:
 
   friend JNI_EXPORT raw::object_ref extract_reference(const Object& obj);
 
+  template <typename Target>
+  friend Target object_cast(const Object &obj);
+
 private:
   friend class Monitor;
 

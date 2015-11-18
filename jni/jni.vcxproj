@@ -195,6 +195,7 @@
     <ClInclude Include="include\jni\java\lang\throwable.hpp" />
     <ClInclude Include="include\jni\jni.hpp" />
     <ClInclude Include="include\jni\local_ref.hpp" />
+    <ClInclude Include="include\jni\object_cast.hpp" />
     <ClInclude Include="include\jni\raw\extract_reference.hpp" />
     <ClInclude Include="include\jni\raw\object_ref_array.hpp" />
     <ClInclude Include="include\jni\raw\field.hpp" />

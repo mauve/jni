@@ -170,6 +170,9 @@
     <ClInclude Include="include\jni\class_name.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\jni\object_cast.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\jni\impl\raw\signature.ipp" />
