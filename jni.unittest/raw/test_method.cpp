@@ -12,9 +12,6 @@ template <typename T>
 static void test_call_method(const char *name, std::initializer_list<T> test_values) {
   auto cls = jni::java::lang::Class::forName("MethodTest");
   auto mid = cls.getMethod<T(T)>(name);
-  BOOST_REQUIRE_MESSAGE(mid != nullptr, "no method named " << name
-                                                           << " on MethodTest");
-
   auto instance = cls.newInstance();
 
   jni::raw::method<T(T)> method{mid};
@@ -63,9 +60,6 @@ BOOST_AUTO_TEST_CASE(call_long_method) {
 BOOST_AUTO_TEST_CASE(call_float_method) {
   auto cls = jni::java::lang::Class::forName("MethodTest");
   auto mid = cls.getMethod<float(float)>("floatMethod");
-  BOOST_REQUIRE_MESSAGE(mid != nullptr,
-                        "no named named floatMethod on MethodTest");
-
   auto instance = cls.newInstance();
 
   jni::raw::method<float(float)> method{mid};
@@ -82,9 +76,6 @@ BOOST_AUTO_TEST_CASE(call_float_method) {
 BOOST_AUTO_TEST_CASE(call_double_method) {
   auto cls = jni::java::lang::Class::forName("MethodTest");
   auto mid = cls.getMethod<double(double)>("doubleMethod");
-  BOOST_REQUIRE_MESSAGE(mid != nullptr,
-                        "no named named doubleMethod on MethodTest");
-
   auto instance = cls.newInstance();
 
   jni::raw::method<double(double)> method{mid};
