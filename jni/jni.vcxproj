@@ -183,6 +183,7 @@
   <ItemGroup>
     <ClInclude Include="include\jni\api_version.hpp" />
     <ClInclude Include="include\jni\array.hpp" />
+    <ClInclude Include="include\jni\class_name.hpp" />
     <ClInclude Include="include\jni\config.hpp" />
     <ClInclude Include="include\jni\detail\add_local_ref.hpp" />
     <ClInclude Include="include\jni\detail\remove_ref.hpp" />

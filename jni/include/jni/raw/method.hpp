@@ -15,6 +15,7 @@ namespace jni {
 namespace java {
 namespace lang {
 class Class;
+class Object;
 } // namespace lang
 } // namespace java
 
@@ -25,13 +26,19 @@ template <typename Function> class method;
 template <typename R, typename... Args> class method<R(Args...)> {
 public:
   method() = delete;
+  method(const method &) = default;
+  method(method &&) = default;
+
   method(method_id mid);
-  method(environment &env, raw::class_ref cls, const char *name);
   method(java::lang::Class &cls, const char *name);
+  method(java::lang::Class &cls, const char *name, const char *signature);
 
   template <typename... CallingArgs>
-  add_local_ref_t<R> operator()(environment &env, object_ref instance,
+  add_local_ref_t<R> operator()(const java::lang::Object &instance,
                                 CallingArgs... args);
+
+  method &operator=(const method &) = default;
+  method &operator=(method &&) = default;
 
 private:
   method_id _mid;

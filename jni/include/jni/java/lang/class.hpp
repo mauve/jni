@@ -2,6 +2,7 @@
 #pragma once
 
 #include <jni/config.hpp>
+#include <jni/class_name.hpp>
 #include <jni/raw/signature.hpp>
 #include <jni/raw/types.hpp>
 #include <jni/global_ref.hpp>
@@ -103,3 +104,5 @@ raw::class_ref extract_reference(const Class &cls);
 } // namespace lang
 } // namespace java
 } // namespace jni
+
+CLASS_NAME(jni::java::lang::Class, "java/lang/Class");

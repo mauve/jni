@@ -54,39 +54,28 @@ Object::~Object() = default;
 Object &Object::operator=(const Object &obj) = default;
 Object &Object::operator=(Object &&obj) = default;
 
-int Object::hashCode() const {
-  return method_cache::get().hashCode(environment::current(), _ref.raw());
-}
+int Object::hashCode() const { return method_cache::get().hashCode(*this); }
 
 std::string Object::toString() const {
-  return to_string(
-      method_cache::get().toString(environment::current(), _ref.raw()));
+  return to_string(method_cache::get().toString(*this));
 }
 
 bool Object::equals(const Object &other) const {
-  return method_cache::get().equals(environment::current(), _ref.raw(),
-                                    other._ref.raw());
+  return method_cache::get().equals(*this, other._ref.raw());
 }
 
 Class Object::getClass() const {
   return Class{environment::current().get_object_class(_ref.raw())};
 }
 
-void Object::notify() {
-  method_cache::get().notify(environment::current(), _ref.raw());
-}
+void Object::notify() { method_cache::get().notify(*this); }
 
-void Object::notifyAll() {
-  method_cache::get().notify(environment::current(), _ref.raw());
-}
+void Object::notifyAll() { method_cache::get().notify(*this); }
 
-void Object::wait() const {
-  method_cache::get().wait1(environment::current(), _ref.raw());
-}
+void Object::wait() const { method_cache::get().wait1(*this); }
 
 void Object::wait(const boost::chrono::milliseconds &timeout) const {
-  method_cache::get().wait2(environment::current(), _ref.raw(),
-                            timeout.count());
+  method_cache::get().wait2(*this, timeout.count());
 }
 
 void Object::wait(const boost::chrono::nanoseconds &timeout) const {
@@ -94,8 +83,7 @@ void Object::wait(const boost::chrono::nanoseconds &timeout) const {
       boost::chrono::duration_cast<boost::chrono::milliseconds>(timeout);
   auto remainder = timeout % 1000000;
 
-  method_cache::get().wait3(environment::current(), _ref.raw(),
-                            milliseconds.count(),
+  method_cache::get().wait3(*this, milliseconds.count(),
                             static_cast<std::int32_t>(remainder.count()));
 }
 

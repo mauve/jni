@@ -56,16 +56,13 @@ Class ClassLoader::defineClass(const std::string &name,
   array<std::uint8_t> buffer{begin, end};
 
   return Class{method_cache::get().defineClass(
-      environment::current(), extract_reference(*this),
-      extract_reference(jname), extract_reference(buffer), (std::int32_t)0,
-      (std::int32_t)buffer.size())};
+      *this, extract_reference(jname), extract_reference(buffer),
+      (std::int32_t)0, (std::int32_t)buffer.size())};
 }
 
 Class ClassLoader::loadClass(const std::string &name) {
   string jname{name.c_str()};
-  return Class{method_cache::get().loadClass(environment::current(),
-                                             extract_reference(*this),
-                                             extract_reference(jname))};
+  return Class{method_cache::get().loadClass(*this, extract_reference(jname))};
 }
 
 ClassLoader ClassLoader::getSystemClassLoader() {

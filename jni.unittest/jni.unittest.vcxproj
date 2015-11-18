@@ -162,6 +162,7 @@
     <ClCompile Include="java\lang\test_object.cpp" />
     <ClCompile Include="raw\test_object_ref_array.cpp" />
     <ClCompile Include="raw\test_signature.cpp" />
+    <ClCompile Include="test_classname.cpp" />
     <ClCompile Include="test_string.cpp" />
     <ClCompile Include="java\lang\test_throwable.cpp" />
     <ClCompile Include="raw\test_types.cpp" />

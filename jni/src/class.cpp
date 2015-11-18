@@ -36,8 +36,7 @@ struct method_cache {
 
   method_cache(Class cls)
       : newInstance{cls, "newInstance"},
-        getClassLoader{
-            cls.getMethod("getClassLoader", "()Ljava/lang/ClassLoader;")},
+        getClassLoader{cls, "getClassLoader", "()Ljava/lang/ClassLoader;"},
         getName{cls, "getName"}, getSimpleName{cls, "getSimpleName"},
         isAnnotation{cls, "isAnnotation"},
         isAnnotationPresent{cls, "isAnnotationPresent"},
@@ -80,101 +79,85 @@ raw::method_id Class::getMethod(const char *name, const char *signature) {
 }
 
 ClassLoader Class::getClassLoader() const {
-  return ClassLoader{method_cache::get().getClassLoader(
-      environment::current(), extract_reference(*this))};
+  return ClassLoader{method_cache::get().getClassLoader(*this)};
 }
 
 Object Class::newInstance() const {
-  return Object{method_cache::get().newInstance(environment::current(),
-                                                extract_reference(*this))};
+  return Object{method_cache::get().newInstance(*this)};
 }
 
 std::string Class::getName() const {
-  return to_string(method_cache::get().getName(environment::current(),
-                                               extract_reference(*this)));
+  return to_string(method_cache::get().getName(*this));
 }
 
 std::string Class::getSimpleName() const {
-  return to_string(method_cache::get().getSimpleName(environment::current(),
-                                                     extract_reference(*this)));
+  return to_string(method_cache::get().getSimpleName(*this));
 }
 
 // Returns true if this Class object represents an annotation type.
 bool Class::isAnnotation() const {
-  return method_cache::get().isAnnotation(environment::current(),
-                                          extract_reference(*this));
+  return method_cache::get().isAnnotation(*this);
 }
 
 // Returns true if an annotation for the specified type is present on this
 // element, else false.
 bool Class::isAnnotationPresent(const Class &annotationClass) {
-  return method_cache::get().isAnnotationPresent(
-      environment::current(), extract_reference(*this),
+  return method_cache::get().isAnnotationPresent(*this,
       extract_reference(annotationClass));
 }
 
 // Returns true if and only if the underlying class is an anonymous class.
 bool Class::isAnonymousClass() const {
-  return method_cache::get().isAnonymousClass(environment::current(),
-                                              extract_reference(*this));
+  return method_cache::get().isAnonymousClass(*this);
 }
 
 // Determines if this Class object represents an array class.
 bool Class::isArray() const {
-  return method_cache::get().isArray(environment::current(),
-                                     extract_reference(*this));
+  return method_cache::get().isArray(*this);
 }
 
 // Determines if the class or interface represented by this Class object is
 // either the same as, or is a superclass or superinterface of, the class or
 // interface represented by the specified Class parameter.
 bool Class::isAssignableFrom(const Class &cls) const {
-  return method_cache::get().isAssignableFrom(
-      environment::current(), extract_reference(*this), extract_reference(cls));
+  return method_cache::get().isAssignableFrom(*this, extract_reference(cls));
 }
 
 // Returns true if and only if this class was declared as an enum in the source
 // code.
 bool Class::isEnum() const {
-  return method_cache::get().isEnum(environment::current(),
-                                    extract_reference(*this));
+  return method_cache::get().isEnum(*this);
 }
 
 // Determines if the specified Object is assignment - compatible with the object
 // represented by this Class.
 bool Class::isInstance(const Object &obj) const {
-  return method_cache::get().isInstance(
-      environment::current(), extract_reference(*this), extract_reference(obj));
+  return method_cache::get().isInstance(*this, extract_reference(obj));
 }
 
 // Determines if the specified Class object represents an interface type.
 bool Class::isInterface() const {
-  return method_cache::get().isInterface(environment::current(),
-                                         extract_reference(*this));
+  return method_cache::get().isInterface(*this);
 }
 
 // Returns true if and only if the underlying class is a local class.
 bool Class::isLocalClass() const {
-  return method_cache::get().isLocalClass(environment::current(),
-                                          extract_reference(*this));
+  return method_cache::get().isLocalClass(*this);
 }
 
 // Returns true if and only if the underlying class is a member class.
 bool Class::isMemberClass() const {
-  return method_cache::get().isMemberClass(environment::current(),
-                                           extract_reference(*this));
+  return method_cache::get().isMemberClass(*this);
 }
 
 // Determines if the specified Class object represents a primitive type.
 bool Class::isPrimitive() const {
-  return method_cache::get().isPrimitive(environment::current(),
-                                         extract_reference(*this));
+  return method_cache::get().isPrimitive(*this);
 }
 
 // Returns true if this class is a synthetic class; returns false otherwise.
 bool Class::isSynthetic() const {
-  return method_cache::get().isSynthetic(environment::current(),
-                                         extract_reference(*this));
+  return method_cache::get().isSynthetic(*this);
 }
 
 raw::class_ref extract_reference(const Class &cls) {

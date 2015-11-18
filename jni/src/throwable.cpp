@@ -51,12 +51,14 @@ struct method_cache {
 } // namespace anonymous
 
 Throwable::Throwable(local_ref<raw::throwable_ref> &&ref)
-    : Object{ref_cast<raw::object_ref>(std::move(ref))}, runtime_error{"Throwable"} {
+    : Object{ref_cast<raw::object_ref>(std::move(ref))},
+      runtime_error{"Throwable"} {
   _serialized_message = getMessage();
 }
 
 Throwable::Throwable(global_ref<raw::throwable_ref> &&ref)
-    : Object{ref_cast<raw::object_ref>(std::move(ref))}, runtime_error{"Throwable"} {
+    : Object{ref_cast<raw::object_ref>(std::move(ref))},
+      runtime_error{"Throwable"} {
   _serialized_message = getMessage();
 }
 
@@ -68,37 +70,33 @@ Throwable &Throwable::operator=(const Throwable &other) = default;
 Throwable &Throwable::operator=(Throwable &&other) = default;
 
 void Throwable::addSuppressed(const Throwable &exception) {
-  method_cache::get().addSuppressed(environment::current(), extract_reference(*this),
-                                    extract_reference(exception));
+  method_cache::get().addSuppressed(*this, extract_reference(exception));
 }
 
 Throwable Throwable::fillInStackTrace() {
-  return Throwable{
-      method_cache::get().fillInStackTrace(environment::current(), extract_reference(*this))};
+  return Throwable{method_cache::get().fillInStackTrace(*this)};
 }
 
 Throwable Throwable::getCause() const {
-  return Throwable{method_cache::get().getCause(environment::current(), extract_reference(*this))};
+  return Throwable{method_cache::get().getCause(*this)};
 }
 
 std::string Throwable::getLocalizedMessage() const {
-  return to_string(
-      method_cache::get().getLocalizedMessage(environment::current(), extract_reference(*this)));
+  return to_string(method_cache::get().getLocalizedMessage(*this));
 }
 
 std::string Throwable::getMessage() const {
-  return to_string(
-      method_cache::get().getMessage(environment::current(), extract_reference(*this)));
+  return to_string(method_cache::get().getMessage(*this));
 }
 
 Throwable Throwable::initCause(const Throwable &cause) {
-  return Throwable{method_cache::get().initCause(environment::current(), extract_reference(*this),
-                                                 extract_reference(cause))};
+  return Throwable{
+      method_cache::get().initCause(*this, extract_reference(cause))};
 }
 
 void Throwable::printStackTrace() const {
   environment::current().clear_exceptions();
-  method_cache::get().printStackTrace(environment::current(), extract_reference(*this));
+  method_cache::get().printStackTrace(*this);
 }
 
 void Throwable::printStackTrace(std::ostream &s) const {
@@ -114,28 +112,12 @@ void Throwable::printStackTrace(std::ostream &s) const {
       reinterpret_cast<raw::class_ref>(extract_reference(print_writer_class)),
       print_writer_constructor, constructor_args.data());
 
-  method_cache::get().printStackTrace2(environment::current(), extract_reference(*this),
-                                       print_writer);
+  method_cache::get().printStackTrace2(*this, print_writer);
 
   s << string_writer.toString();
 }
 
 char const *Throwable::what() const { return _serialized_message.c_str(); }
-
-void Throwable::checkEnvironmentAndThrow() {
-  if (environment::current().exception_occurred()) {
-    auto current_exception = environment::current().current_exception();
-    environment::current().clear_exceptions();
-    if (!current_exception)
-      return;
-
-    Throwable throwable{std::move(current_exception)};
-#ifdef _DEBUG
-    throwable.printStackTrace();
-#endif
-    throw throwable;
-  }
-}
 
 } // namespace lang
 

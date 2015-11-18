@@ -13,6 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\include">
+      <UniqueIdentifier>{551f9ae7-1e74-423c-b0fc-b285ca2d1693}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\include\jni">
+      <UniqueIdentifier>{ddf6ba43-5fe2-4953-bed3-c53f6f5c0377}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\include\jni\impl">
+      <UniqueIdentifier>{4f0bf969-e3f4-4f47-8284-4f4784826c87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\include\jni\java">
+      <UniqueIdentifier>{c1dd3f2a-4356-4475-a147-27d4eefaa753}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\include\jni\java\lang">
+      <UniqueIdentifier>{aadd3290-f6f8-45ed-a86e-bdd37663e19d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\include\jni\raw">
+      <UniqueIdentifier>{f23762a8-8acc-4095-b6b6-26c7d64164bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\class.cpp">
@@ -68,15 +86,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\jni\java\lang\class.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\jni\java\lang\object.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\jni\environment.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\jni\array.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -92,31 +101,10 @@
     <ClInclude Include="include\jni\raw\signature.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\jni\init.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\jni\api_version.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\jni\vm.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\jni\string.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\jni\errors.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\jni\raw\field.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\jni\config.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\internal\ref_converter.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\jni\java\lang\classloader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\jni\detail\remove_ref.hpp">
@@ -125,28 +113,61 @@
     <ClInclude Include="include\jni\detail\add_local_ref.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\jni\java\lang\throwable.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\jni\detail\throw_if_exception.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\jni\raw\object_ref_array.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\jni\jni.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\jni\raw\extract_reference.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\jni\wstring.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\jni\local_ref.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\jni\global_ref.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\java\lang\classloader.hpp">
+      <Filter>Header Files\include\jni\java\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\java\lang\class.hpp">
+      <Filter>Header Files\include\jni\java\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\java\lang\object.hpp">
+      <Filter>Header Files\include\jni\java\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\java\lang\throwable.hpp">
+      <Filter>Header Files\include\jni\java\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\api_version.hpp">
+      <Filter>Header Files\include\jni</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\config.hpp">
+      <Filter>Header Files\include\jni</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\environment.hpp">
+      <Filter>Header Files\include\jni</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\errors.hpp">
+      <Filter>Header Files\include\jni</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\init.hpp">
+      <Filter>Header Files\include\jni</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\jni.hpp">
+      <Filter>Header Files\include\jni</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\string.hpp">
+      <Filter>Header Files\include\jni</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\wstring.hpp">
+      <Filter>Header Files\include\jni</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\raw\field.hpp">
+      <Filter>Header Files\include\jni\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jni\class_name.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

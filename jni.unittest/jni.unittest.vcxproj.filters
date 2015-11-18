@@ -48,9 +48,13 @@
     <ClCompile Include="java\lang\test_classloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_classname.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="classes\MethodTest.java" />
     <None Include="classes\ObjectRefArray.java" />
+    <None Include="classes\DefineClass.java" />
   </ItemGroup>
 </Project>

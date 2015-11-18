@@ -2,6 +2,7 @@
 #pragma once
 
 #include <jni/config.hpp>
+#include <jni/class_name.hpp>
 #include <jni/raw/types.hpp>
 #include <jni/global_ref.hpp>
 #include <jni/local_ref.hpp>
@@ -39,3 +40,5 @@ private:
 } // namespace lang
 } // namespace java
 } // namespace jni
+
+CLASS_NAME(jni::java::lang::ClassLoader, "java/lang/ClassLoader");

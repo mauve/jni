@@ -2,6 +2,7 @@
 #pragma once
 
 #include <jni/config.hpp>
+#include <jni/class_name.hpp>
 #include <jni/java/lang/object.hpp>
 
 #include <jni/global_ref.hpp>
@@ -73,16 +74,14 @@ public:
   // because we do not want to invoke java methods via the std::exception
   // interface (because that might create new problems), override what()
   // and returned some cached data
-  virtual char const* what() const override;
-
-  static void checkEnvironmentAndThrow();
+  virtual char const *what() const override;
 
 private:
   std::string _serialized_message;
 };
 
 } // namespace lang
-
 } // namespace java
-
 } // namespace jni
+
+CLASS_NAME(jni::java::lang::Throwable, "java/lang/Throwable");
